@@ -1,11 +1,21 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\ArticleController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+/* Route::get('/', function () { // Replaced
     return view('welcome');
-});
+}); */
+
+
+
+// CRUD for articles
+Route::resource('articles', ArticleController::class);
+
+// Homepage
+Route::get('/', [WelcomeController::class, 'index'])->name('homepage');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -18,3 +28,6 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Fallback route
+Route::fallback([WelcomeController::class, 'index']); //Fallback route for unknown url  
