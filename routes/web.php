@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\ArticleController;
@@ -13,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 
 // CRUD for articles
 Route::resource('articles', ArticleController::class);
+
+// CRUD for comments
+Route::resource('comments', CommentController::class);
 
 // Homepage
 Route::get('/', [WelcomeController::class, 'index'])->name('homepage');

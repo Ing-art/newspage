@@ -18,6 +18,15 @@ class ArticleFactory extends Factory
     {
         return [
             //
+            'headline' => fake()->sentence(),
+            'subject' => $this->faker->randomElement([
+                'politics', 'society', 'science', 'health', 'sports', 'economy', 'entertainment'
+            ]),
+            'text' => $this->faker->paragraph(4),
+            'created_at' =>'2024-07-10',
+            'user_id' =>$this->faker->numberBetween(1,4),
+            'published_at'=>'2024-07-11'
+
         ];
     }
 }
