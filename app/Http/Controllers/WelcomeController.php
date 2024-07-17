@@ -21,9 +21,6 @@ class WelcomeController extends Controller
     $toparticles = Article::whereNotNull('published_at')->where('isTopNews',1)->get();
 
         return view('welcome', ['articles' => $articles, 'total' => $total, 'toparticles' => $toparticles, 'lastItem'=>$lastItem]);
-    }
-
-
-    
+    } 
 }
 
