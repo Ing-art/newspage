@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail; // User must have a verified email
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -45,4 +47,34 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    // Return the user's roles
+    public function roles(){
+        return $this->belongsToMany('App\Models\Role');
+    }
+
+    // Check if the user has a role
+    public function hasRole($rolenames):bool{
+
+        if(!is_array($rolenames))
+            $rolenames = [$rolenames];
+
+        foreach($this->roles as $role){
+            if(in_array($role->role, $rolenames))
+                return true;
+        }
+
+        return false;
+    }
+
+    // Check if the user is the writer of an article
+    public function isOwner(Article $article):bool{
+        return $this->id == $article->user_id;
+    }
+
+    // Get the articles of the user
+    public function articles(): HasMany {
+        return $this->hasMany(Article::class);
+    }
+
 }

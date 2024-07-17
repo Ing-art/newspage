@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('comments', function (Blueprint $table) {
+   
             // add user_id and article_id
             $table->unsignedBigInteger('user_id')->nullable()->after('created_at');
             $table->unsignedBigInteger('article_id')->nullable()->after('created_at');
@@ -19,13 +20,11 @@ return new class extends Migration
             // relationships
             $table->foreign('user_id')
                    ->references('id')->on('users')
-                   ->onUpdate('cascade')->onDelete('restrict');
+                   ->onUpdate('cascade')->nullOnDelete(); // on delete, the user_id is set to NULL
             
             $table->foreign('article_id')
                    ->references('id')->on('articles')
-                   ->onUpdate('cascade')->onDelete('restrict');
-            
-
+                   ->onUpdate('cascade')->onDelete('cascade'); // on delete all comments are deleted
         });
     }
 
@@ -35,11 +34,13 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('comments', function (Blueprint $table) {
-            //
-            $table->dropForeign('comments_user_id_foreign');
-            $table->dropColumn('user_id');
 
-            $table->dropForeign('comments_article_id_foreign');
+            /// Drop the foreign key constraints
+            $table->dropForeign(['user_id']);
+            $table->dropForeign(['article_id']);
+            
+            // Drop the columns
+            $table->dropColumn('user_id');
             $table->dropColumn('article_id');
         });
     }

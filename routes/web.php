@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 // CRUD for articles
 Route::resource('articles', ArticleController::class);
 
+// Delete confirmation
+Route::get('articles/{article}/delete', [ArticleController::class, 'delete'])
+        ->name('articles.delete');
+
 // CRUD for comments
 Route::resource('comments', CommentController::class);
 
