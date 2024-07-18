@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 
@@ -22,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
     {
         //So we can use Bootsrap instead of Tailwind
         Paginator::useBootstrap();
+        // For the footer
+        View::share('author', 'Ing-Art');
     }
 }
 
