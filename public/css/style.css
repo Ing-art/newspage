@@ -100,8 +100,37 @@ img, svg {
 
 }
 
+.text-justify{
+    text-align:justify;
+    text-justify: inter-word;
+}
 
-/* loader */
+.first-letter{
+    font-size:xx-large;
+}
+
+/* COVER CARDS */
+
+.card-img-container{
+    position:relative;
+    padding-bottom:70%; /*70% of the height */
+    height:0;
+    overflow:hidden;
+
+}
+
+.card-img-container img{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+
+
+/* TODO LOADER */
 #loader {
     position: absolute;
     left: 50%;

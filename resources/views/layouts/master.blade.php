@@ -26,8 +26,10 @@
     @endenv
 
     @section('menu')
+
     {{-- @php($page = $page ?? '') --}}
         @php($page = Route::currentRouteName())
+        
         <div class="container-fluid ">
             <div class="logo-wrapper ">
                 <h1 class="display-1 text-center border">
@@ -93,10 +95,10 @@
                                 </li>
                             @endguest
                         </ul>
-                        <form class="d-flex">
+{{--                         <form class="d-flex">
                             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-outline-warning" type="submit">Search</button>
-                        </form>
+                        </form> --}}
                     </div>
                 </div>
             </nav>
@@ -111,11 +113,11 @@
 
             <!--Slot component for success / error message -->
             @if (Session::has('success'))
-                <x-alert type="success" message="{{ Session::get('success') }}"></x-alert> <!--FIXME x-alert error-->
+                <x-alert type="success" message="{{ Session::get('success') }}"></x-alert> 
             @endif
 
             @if ($errors->any())
-                <x-alert type="danger" message="There are some errors:"> <!--FIXME x-alert no funciona-->
+                <x-alert type="danger" message="There are some errors:"> 
                     <ul>
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -123,12 +125,21 @@
                     </ul>
                 </x-alert>
             @endif
+            
 
             <!--Main Content-->
             @yield('body')
+
+            @section('link')
+            <p class="mb-5 mx-5">
+                <a href="#">Back to top</a>
+            </p>
+            @show
+            
             <!--FOOTER SECTION -->
+
             <footer class="page-footer font-small p-4 bg-light">
-                <p class="text-end">
+                <p class="text-end small">
                     Created with <b>Laravel</b> and <b>Bootstrap</b> by <i>{{$author}}</i> <!--Defined in AppServiceProvider-->
                 </p>
             </footer>
