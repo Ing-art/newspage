@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DISK', 'public'),
+    'default' => env('FILESYSTEM_DRIVER', 'public'), // Changed from FILESYSTEM_DISK
 
     // Default route for the article images
     'articlesImageDir' => 'images/articles/',

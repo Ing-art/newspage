@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class ArticleController extends Controller
 {
@@ -21,15 +24,21 @@ class ArticleController extends Controller
     public function __construct()
     {
 
-        /*      $this->middleware('verified')->except('index', 'show', 'search');
+/*         $this->middleware('verified')->except('index', 'show', 'search');
 
-                $this->middleware('password.confirm')->only('destroy');
+           $this->middleware('password.confirm')->only('destroy','create');
 
-                $this->middleware('throttle:3,1')->only('delete');  // For testing throttle */
+           $this->middleware('throttle:3,1')->only('delete');  // For testing throttle  */
     }
 
-    public function create()
-    {
+    public function create(Request $request)
+    {    
+        if(!Auth::check()){
+            return redirect()->route('login')->with('error', 'Please log in');
+        }
+
+        if($request->user()->cant('create', Article::class))
+            abort(401, 'You have not permission. You are not a writer'); //TODO Check
 
         // Subjects for the select
         $subjects = [
@@ -85,16 +94,20 @@ class ArticleController extends Controller
             ->with('success', 'Your article has been saved');
     }
 
-    public function show($id)
+    public function show(Article $article)
     {
 
-        $article = Article::findOrFail($id);
-
-        return view('articles.show', ['article' => $article]);
+        return view('articles.show', ['article' => $article]); //Make sure the @auth are put in the relevant protected sections
     }
 
-    public function edit($id)
+    public function edit(Request $request, Article $article)
     {
+        if(!Auth::check()){
+            return redirect()->route('login')->with('error', 'Please log in');
+        }
+
+        if($request->user()->cant('update',$article))
+            abort(401, 'You have not permission. The article is not yours');
 
         // Subjects for the select
         $subjects = [
@@ -109,46 +122,115 @@ class ArticleController extends Controller
             'Sports',
             'Technology'
         ];
-        $article = Article::findOrFail($id);
 
         return view('articles.update', ['article' => $article, 'subjects'=>$subjects]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Article $article)
     {
+        if(!Auth::check()){
+            return redirect()->route('login')->with('error', 'Please log in');
+        }
+
+        if($request->user()->cant('update',$article))
+            abort(401, 'You have not permission. The article is not yours');
 
         $request->validate([
             'headline' => 'required|max:255',
             'text' => 'required',
             'subject' => 'required|max:40',
             'istopnews' => 'sometimes|number',
-            'image' => 'sometimes|file|image|mimes:jpg,jpeg,png,gif,webp|max:5000',
+            'image' => 'nullable|file|image|mimes:jpg,jpeg,png,gif,webp|max:5000',
             'rejected' => 'sometimes|number'
         ]);
 
-        $article = Article::findOrFail($id);
-        $article->update($request->all());
+        $article->headline = $request->input('headline');
+        $article->subject = $request->input('subject');
+        $article->text = $request->input('text');
 
-        return redirect()->route('articles.show', $id)
+        if($request->hasFile('image')){
+            // Upload the new image to the defined directory
+            $pathNewImage = $request->file('image')
+            ->store(config('filesystems.articlesImageDir'), 'public');
+
+            // Delete the old image if it exists
+            if($article->image){
+                $toDelete = config('filesystems.articlesImageDir').'/'.$article->image;
+                Storage::delete($toDelete); // Delete the old image      
+            }
+
+            // Update the article's image in the database
+            $article->image = pathinfo($pathNewImage, PATHINFO_BASENAME);
+                    
+        }else{  // If something goes wrong
+            if(isset($pathNewImage))
+                Storage::delete($pathNewImage); // Delete new image
+        };
+
+        $article->save();
+
+        return redirect()->route('articles.show', $article->id)
             ->with('success', "Article successfuly updated");
     }
 
-    public function delete($id)
+    public function delete(Article $article)
     {
-
-        $article = Article::findOrFail($id);
-
+        if(!Auth::check()){
+            return redirect()->route('login')->with('error', 'Please log in');
+        }
         return view('articles.delete', ['article' => $article]);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, Article $article)
     {
-
-        $article = Article::findOrFail($id);
+        if(!Auth::check()){
+            return redirect()->route('login')->with('error', 'Please log in');
+        }
 
         $article->delete();
 
         return redirect('homepage')
             ->with('success', "Article successfully deleted");
     }
+
+    public function publish (Request $request, Article $article){
+
+        if(!Auth::check()){
+            return redirect()->route('login')->with('error', 'Please log in');
+        }
+
+        if($request->user()->cant('publish',$article))
+            abort(401, 'You have not permission. You are not an editor');
+
+        if($article){
+
+            $article->touch('published_at'); // Update the published_at value to now
+            $article->rejected = 0;
+            $article->save();
+
+            return back()->with('success', 'The article is now live!');
+        }
+        return back()->with('message', 'something went wrong');
+    }
+
+    public function reject(Request $request, Article $article){
+
+        if(!Auth::check()){
+            return redirect()->route('login')->with('error', 'Please log in'); //FIXME login layout
+        }
+
+        if($request->user()->cant('reject',$article))
+            abort(401, 'You have not permission. You are not an editor');
+
+        if($article){
+
+            $article->rejected = 1;
+            $article->save();
+
+            return back()->with('success', 'The article has been flagged as rejected');
+        }
+
+        return back()->with('message', 'something went wrong');
+    }
 }
+

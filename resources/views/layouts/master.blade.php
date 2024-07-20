@@ -20,16 +20,16 @@
 
 <body class="m-3">
     @env(['local', 'test'])
-    <div class="alert alert-warning text-center"> 
+    <div class="alert alert-warning text-center">
         <p><b>ATTENTION: </b>in local / test mode </p>
     </div>
     @endenv
 
     @section('menu')
 
-    {{-- @php($page = $page ?? '') --}}
+        {{-- @php($page = $page ?? '') --}}
         @php($page = Route::currentRouteName())
-        
+
         <div class="container-fluid ">
             <div class="logo-wrapper ">
                 <h1 class="display-1 text-center border">
@@ -38,7 +38,7 @@
             </div>
             <nav class="navbar navbar-expand-md navbar-dark bg-dark">
                 <div class="container-fluid">
-                    <a class="navbar-brand {{$page == 'homepage' ? 'active': ''}}" href="{{ route('homepage') }}">MWN</a>
+                    <a class="navbar-brand {{ $page == 'homepage' ? 'active' : '' }}" href="{{ route('homepage') }}">MWN</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -47,12 +47,14 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link {{$page == 'review' ? 'active': ''}}" aria-current="page" href="{{ route('homepage') }}">Review</a>
+                                <a class="nav-link {{ $page == 'review' ? 'active' : '' }}" aria-current="page"
+                                    href="{{ route('homepage') }}">Review</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{$page == 'newarticle' ? 'active': ''}}" aria-current="page" href="{{ route('articles.create') }}">New Article</a>
+                                <a class="nav-link {{ $page == 'newarticle' ? 'active' : '' }}" aria-current="page"
+                                    href="{{ route('articles.create') }}">New Article</a>
                             </li>
-                            
+
                             <!--FOR GUESTS-->
 
                             @guest
@@ -68,8 +70,7 @@
                                     </li>
                                 @endif
 
-                            <!--FOR REGISTERED USERS-->
-
+                                <!--FOR REGISTERED USERS-->
                             @else
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
@@ -95,7 +96,7 @@
                                 </li>
                             @endguest
                         </ul>
-{{--                         <form class="d-flex">
+                        {{--                         <form class="d-flex">
                             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-outline-warning" type="submit">Search</button>
                         </form> --}}
@@ -113,11 +114,11 @@
 
             <!--Slot component for success / error message -->
             @if (Session::has('success'))
-                <x-alert type="success" message="{{ Session::get('success') }}"></x-alert> 
+                <x-alert type="success" message="{{ Session::get('success') }}"></x-alert>
             @endif
 
             @if ($errors->any())
-                <x-alert type="danger" message="There are some errors:"> 
+                <x-alert type="danger" message="There are some errors:">
                     <ul>
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -125,22 +126,30 @@
                     </ul>
                 </x-alert>
             @endif
-            
+
 
             <!--Main Content-->
             @yield('body')
 
             @section('link')
-            <p class="mb-5 mx-5">
-                <a href="#">Back to top</a>
-            </p>
+                <div class="text-center">
+                    <span class="mb-5 mx-5">
+                        <a href="#">Back to top</a>
+                    </span>
+                    @if ($page != 'homepage')
+                    <span class="mb-5 mx-5 text-center">
+                        <a href="{{ url()->previous() }}">Back</a>
+                    </span>
+                    @endif
+                </div>
             @show
-            
+
             <!--FOOTER SECTION -->
 
             <footer class="page-footer font-small p-4 bg-light">
                 <p class="text-end small">
-                    Created with <b>Laravel</b> and <b>Bootstrap</b> by <i>{{$author}}</i> <!--Defined in AppServiceProvider-->
+                    Created with <b>Laravel</b> and <b>Bootstrap</b> by <i>{{ $author }}</i>
+                    <!--Defined in AppServiceProvider-->
                 </p>
             </footer>
         </main>

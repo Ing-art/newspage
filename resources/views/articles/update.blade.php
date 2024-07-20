@@ -43,9 +43,9 @@
                 <!--Image Preview-->
                 <img class="rounded img-thumbnail my-3" alt="image of {{$article->headline}} by {{$article->user->name}}"
                     title="image of {{$article->headline}}" src="{{
-        $article->image ?
-        asset('storage/'.config('filesystems.articlesImageDir')).'/'.$article->image:
-        asset('storage/'.config('filesystems.articlesImageDir')).'/default.jpg'}}"><!--FIXME-Les imatges no es guarden bé, es queden al tmp-->
+                    $article->image ?
+                    asset('storage/'.config('filesystems.articlesImageDir')).'/'.$article->image:
+                    asset('storage/'.config('filesystems.articlesImageDir')).'/default.jpg'}}"><!--FIXME-Les imatges no es guarden bé, es queden al tmp-->
             </div>
 
             <div class="d-grid gap-2 col-3 d-md-block mt-4">

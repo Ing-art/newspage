@@ -25,6 +25,13 @@ Route::resource('comments', CommentController::class);
 // Homepage
 Route::get('/', [WelcomeController::class, 'index'])->name('homepage');
 
+// Publish
+Route::get('articles/{article}/publish',[ArticleController::class, 'publish'])->name('articles.publish');
+
+// Publish
+Route::get('articles/{article}/reject',[ArticleController::class, 'reject'])->name('articles.reject');
+
+// Breeze Dashboard
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

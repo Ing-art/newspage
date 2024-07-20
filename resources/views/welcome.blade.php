@@ -19,7 +19,7 @@
                 <div class="card-group row row-cols-1 row-cols-md-2 g-4 ">
                     @foreach($toparticles as $toparticle)
                     <div class="col d-flex ">
-                        <article class="card bg-dark text-white zoom overflow-hidden rounded">
+                        <article class="card bg-dark text-white zoom overflow-hidden rounded" style="height:500px width:auto">
                             <img class="card-img img-fluid " src="{{
                                 $toparticle->image ?
                                 asset('storage/'.config('filesystems.articlesImageDir')).'/'.$toparticle->image:
@@ -29,8 +29,8 @@
                                     <span class="card-text text-warning d-none d-md-block">{{$toparticle->subject}}</span>
                                     <a href="{{route('articles.show', $toparticle->id)}}" class="text-decoration-none text-light"><h3 class="card-title">{{$toparticle->headline}}</h3></a>
                                     <div>
-                                        <span class="card-text d-none d-md-block">by {{$toparticle->user->name}}</span>
-                                        <span class="card-text d-none d-md-block">Published on {{\Carbon\carbon::parse($toparticle->published_at)->format('jS F Y')}}</span>
+                                        <span class="card-text d-none d-md-block">by {{$toparticle->user->name}} | {{\Carbon\carbon::parse($toparticle->published_at)->format('jS F Y')}}</span>
+                                        {{-- <span class="card-text d-none d-md-block">Published on {{\Carbon\carbon::parse($toparticle->published_at)->format('jS F Y')}}</span> --}}
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +74,7 @@
                           <p class="card-text line-clamp text-justify mt-2">{!! nl2br($article->text) !!}</p>
                         </div>
                         <div class="card-footer text-white bg-dark">
-                          <small class="text-white">Date: {{\Carbon\carbon::parse($article->published_at)->format('jS F Y')}}</small>
+                          <small class="text-white">{{\Carbon\carbon::parse($article->published_at)->format('jS F Y')}}</small>
                         </div>
                       </div>
                     </div>

@@ -32,4 +32,14 @@ class ArticlePolicy
         return ($user->isOwner($article) && $article->published_at == NULL)
         || $user->hasRole('editor');
     }
+
+    public function publish(User $user, Article $article){
+
+        return $user->hasRole('editor');
+    }
+
+    public function reject(User $user, Article $article){
+
+        return $user->hasRole('editor');
+    }
 }
