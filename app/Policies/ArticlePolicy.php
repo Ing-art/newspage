@@ -22,10 +22,10 @@ class ArticlePolicy
 
     // Only the article's writer can edit an article
     public function update(User $user, Article $article){
-        return $user->isOwner($article);
+        return $user->isOwner($article); // TODO Poden editar si es rebutja després de publicar?
     }
 
-    // Only the editor and the writer - when the article is not published
+    // Only the editor and the writer - the latter when the article is not published
     // can delete an article
     public function delete(User $user, Article $article){
         

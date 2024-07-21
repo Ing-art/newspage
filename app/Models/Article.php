@@ -13,11 +13,14 @@ class Article extends Model
     protected $fillable = ['headline', 'text', 'subject', 'istopnews', 'image', 'user_id', 'rejected'];
 
 
-
     // Return the writer of the article
     public function user(){
         return $this->belongsTo('App\Models\User');
     }
 
+    // Return the comments of the article
+    public function comments(){
+        return $this->hasMany('\App\Models\Comment');
+    }
 
 }

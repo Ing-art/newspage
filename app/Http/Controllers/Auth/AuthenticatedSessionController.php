@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -28,7 +29,16 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Get the authenticated user
+        $user = $request->user();
+
+        // Redirect based on role
+
+        if($user->hasRole(['admin', 'editor', 'writer'])){
+            return redirect()->intended(route('dashboard', absolute: false));
+        }
+   
+        return redirect()->intended(route('homepage', absolute: false));     
     }
 
     /**

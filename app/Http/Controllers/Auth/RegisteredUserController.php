@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -41,10 +42,20 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // Assign a default role = 'reader'
+        $defaultRole = Role::where('role', 'reader')->first();
+        $currentDateTime = date('Y-m-d H:i:s');
+        if($defaultRole){
+            $user->roles()->attach($defaultRole, [
+                'created_at' => $currentDateTime,
+                'updated_at' => $currentDateTime
+            ]); // Create a user with a default role and fill in the datetime stamps
+        }
+
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('homepage', absolute: false)); // Redirect to the homepage
     }
 }

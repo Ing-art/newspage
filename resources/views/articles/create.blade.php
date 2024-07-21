@@ -2,7 +2,7 @@
 @extends('layouts.master')
 @section('title', 'New Article')
 @section('body')
-    <h1 class="text-center mt-3">Create a new article</h1><!--TODO permission-->
+    <h1 class="text-center mt-3">Create a new article</h1><!--TODO QA check-->
     <div class="container">
         <div class="row justify-content-center">
             <form class="my-2 p-5" method="POST" action="{{ route('articles.store') }}" enctype="multipart/form-data">

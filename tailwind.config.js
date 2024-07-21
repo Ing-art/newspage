@@ -18,4 +18,5 @@ export default {
     },
 
     plugins: [forms],
+    darkMode: "class", // comment for dark mode
 };

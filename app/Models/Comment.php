@@ -9,5 +9,11 @@ class Comment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['text', 'user_id', 'article_id'];
+    protected $fillable = ['text', 'user_id', 'article_id', 'updated_at'];
+
+    // Get the user who posted the comment
+    public function user(){
+        return $this->belongsTo('App\Models\User');
+    }
+
 }

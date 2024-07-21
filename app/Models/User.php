@@ -73,8 +73,18 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     // Get the articles of the user
-    public function articles(): HasMany {
-        return $this->hasMany(Article::class);
+    public function articles(){ 
+        return $this->hasMany('App\Models\Article');
+    }
+
+    // Check if the user has written a comment
+    public function hasCommented(Comment $comment):bool{
+        return $this->id == $comment->user_id;
+    }
+
+    // Get the comments of the user
+    public function comments(){ 
+        return $this->hasMany('App\Models\Comment');
     }
 
 }
