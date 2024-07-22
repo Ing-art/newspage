@@ -7,6 +7,7 @@ use App\Models\Article;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Auth\Access\AuthorizationException;
 
@@ -103,6 +104,13 @@ class ArticleController extends Controller
                 abort(401, 'Article is not available');
             }
 
+        }
+
+        // Increment Visits
+        $viewed = Session::get('viewed_article',[]);
+        if(!in_array($article->id, $viewed)){
+            $article->increment('visits');
+            Session::push('viewed_article', $article->id);
         }
 
         // Get the comments related to the article (relationship hasMany)

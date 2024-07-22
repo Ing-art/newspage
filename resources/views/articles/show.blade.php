@@ -12,8 +12,17 @@
                     : asset('storage/' . config('filesystems.articlesImageDir')) . '/default.jpg' }}">
 
         </figure>
-        <p class="text-center mt-1">Updated on {{ \Carbon\carbon::parse($article->updated_at)->format('jS F Y') }}</p>
-        <h3 class="text-muted small">{{ $article->subject }}</h3>
+        <p class="text-center mt-1 small">Updated on {{ \Carbon\carbon::parse($article->updated_at)->format('jS F Y') }}</p>
+        <h3 class="text-muted">{{ $article->subject }}</h3>
+        <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-secondary position-relative text-right">
+            Visits
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{$article->visits}}
+              <span class="visually-hidden">Visits</span>
+            </span>
+          </button>
+        </div>
         <p class="mt-4 text-justify">{!! nl2br($article->text) !!}</p>
         <!--Display the article with original line breaks and formats-->
         @auth
