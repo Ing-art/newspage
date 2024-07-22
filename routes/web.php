@@ -6,6 +6,7 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\ArticleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminController;
 
 /* Route::get('/', function () { // Replaced
     return view('welcome');
@@ -45,6 +46,16 @@ Route::get('articles/{article}/reject',[ArticleController::class, 'reject'])
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard'); */
 
+// For admin users - single route
+/* Route::get('user/{user}/details', [AdminController::class, 'userShow'])
+->middleware('is_admin')->name('admin.users.show'); */
+
+Route::middleware('is_admin')->group(function(){
+    Route::get('user/{user}/details',[AdminController::class, 'userShow'])->name('admin.users.show');
+    Route::post('role', [AdminController::class, 'setRole'])->name('admin.user.setrole');
+    Route::delete('role', [AdminController::class, 'removerole'])->name('admin.user.removerole');
+});
+
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -56,4 +67,4 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 // Fallback route
-Route::fallback([WelcomeController::class, 'index']); //Fallback route for unknown url  
+Route::fallback([WelcomeController::class, 'index']); //Fallback route for unknown url

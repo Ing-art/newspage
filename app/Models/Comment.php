@@ -16,4 +16,9 @@ class Comment extends Model
         return $this->belongsTo('App\Models\User');
     }
 
+    // Get the article where the comment belogs
+    public function article(){
+        return $this->belongsTo('App\Models\Article');
+    }
+
 }
