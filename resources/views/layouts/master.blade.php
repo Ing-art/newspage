@@ -46,14 +46,14 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
+{{--                             <li class="nav-item">
                                 <a class="nav-link {{ $page == 'review' ? 'active' : '' }}" aria-current="page"
                                     href="{{ route('homepage') }}">Review</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ $page == 'newarticle' ? 'active' : '' }}" aria-current="page"
                                     href="{{ route('articles.create') }}">New Article</a>
-                            </li>
+                            </li> --}}
 
                             <!--FOR GUESTS-->
 
@@ -79,13 +79,13 @@
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="{{ route('homepage') }}">My Articles</a>
+                                        {{-- <a class="dropdown-item" href="{{ route('homepage') }}">My Articles</a> --}}
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                      document.getElementById('logout-form').submit();">
                                             {{ __('Logout') }}
                                         </a>
-                                        @if (!Auth::user()->hasRole('admin'))
+                                        @if (Auth::user())
                                             <a class="dropdown-item"
                                                 href="{{ route('dashboard', Auth::user()->id) }}">Dashboard</a>
                                         @endif
