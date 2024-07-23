@@ -29,10 +29,9 @@ class HomeController extends Controller
 
         if($request->user()->hasRole('editor')){
 
-            $articlestoreview = Article::whereNull('published_at')->get();
-            $articlesrejected = Article::where('rejected',1)->get();
+            $articlestoreview = Article::whereNull('published_at')->orWhere('rejected', 1)->get();
 
-            return view('dashboard', ['articlestoreview' => $articlestoreview, 'articlesrejected'=>$articlesrejected]);
+            return view('dashboard', ['articlestoreview' => $articlestoreview]);
 
         }
 
