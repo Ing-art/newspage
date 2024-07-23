@@ -13,13 +13,24 @@ class Contact extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $message; // message info
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($message)
     {
-        //
+        //Create a new message instance
+        $this->message = $message;
+        dd($message); //FIXME
     }
+
+/*     public function build(){
+        return $this->from($this->message->email)
+                    ->subject('Message received: '.$this->message->subject)
+                    ->with('Madworld News')
+                    ->view('emails.contact');
+    } */
 
     /**
      * Get the message envelope.
@@ -27,8 +38,10 @@ class Contact extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Contact',
+            subject: $this->message->subject,
         );
+
+
     }
 
     /**
@@ -37,7 +50,8 @@ class Contact extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.contact',
+            with: ['body' => $this->message->msg,],
         );
     }
 

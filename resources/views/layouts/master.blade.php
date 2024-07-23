@@ -19,11 +19,11 @@
 </head>
 
 <body class="m-3">
-    @env(['local', 'test'])
+{{--     @env(['local', 'test'])
     <div class="alert alert-warning text-center">
         <p><b>ATTENTION: </b>in local / test mode </p>
     </div>
-    @endenv
+    @endenv --}}
 
     @section('menu')
 
@@ -55,8 +55,13 @@
                                     href="{{ route('articles.create') }}">New Article</a>
                             </li> --}}
 
-                            <!--FOR GUESTS-->
 
+                            <li class="nav-item mr-2">
+                                <a class="nav-link {{ $page == 'contact' ? 'active' : '' }}"
+                                    href="{{ route('contact') }}">Contact</a>
+                            </li>
+
+                            <!--FOR GUESTS-->
                             @guest
                                 @if (Route::has('login'))
                                     <li class="nav-item">

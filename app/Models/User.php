@@ -67,13 +67,22 @@ class User extends Authenticatable implements MustVerifyEmail
         return false;
     }
 
+    // Remaining roles
+    public function remainingRoles(){
+
+        $currentRoles = $this->roles; // current user's roles
+        $allRoles = Role::all(); // all available roles
+
+        return $allRoles->diff($currentRoles);
+    }
+
     // Check if the user is the writer of an article
     public function isOwner(Article $article):bool{
         return $this->id == $article->user_id;
     }
 
     // Get the articles of the user
-    public function articles(){ 
+    public function articles(){
         return $this->hasMany('App\Models\Article');
     }
 
@@ -83,7 +92,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     // Get the comments of the user
-    public function comments(){ 
+    public function comments(){
         return $this->hasMany('App\Models\Comment');
     }
 

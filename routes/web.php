@@ -7,6 +7,8 @@ use App\Http\Controllers\ArticleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ContactController;
 
 /* Route::get('/', function () { // Replaced
     return view('welcome');
@@ -41,7 +43,7 @@ Route::get('articles/{article}/publish',[ArticleController::class, 'publish'])
 Route::get('articles/{article}/reject',[ArticleController::class, 'reject'])
     ->middleware(['auth', 'verified'])->name('articles.reject');
 
-// Breeze Dashboard
+// Original Breeze Dashboard Route
 /* Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard'); */
@@ -50,13 +52,22 @@ Route::get('articles/{article}/reject',[ArticleController::class, 'reject'])
 /* Route::get('user/{user}/details', [AdminController::class, 'userShow'])
 ->middleware('is_admin')->name('admin.users.show'); */
 
+Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
 Route::middleware('is_admin')->group(function(){
     Route::get('user/{user}/details',[AdminController::class, 'userShow'])->name('admin.users.show');
-    Route::post('role', [AdminController::class, 'setRole'])->name('admin.user.setrole');
+    Route::post('role', [AdminController::class, 'setrole'])->name('admin.user.setrole');
     Route::delete('role', [AdminController::class, 'removerole'])->name('admin.user.removerole');
 });
 
-Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+// Contact Form
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+
+// Send Email from contact form
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.mail');
+
+// For blocked users
+Route::get('/blocked', [UserController::class, 'blocked'])->name('user.blocked');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
