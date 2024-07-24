@@ -32,7 +32,7 @@ class Published extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address($this->published->user->email),
+            from: new Address(config('mail.admin_email')),
             subject: 'Your Article Has Been Published',
             
 
