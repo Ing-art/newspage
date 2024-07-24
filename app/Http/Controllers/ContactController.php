@@ -19,9 +19,10 @@ class ContactController extends Controller
         $message = new \stdClass(); // Object with the data. "\" to set root
         $message->subject = $request->subject;
         $message->email= $request->email;
-        $message->name = $request->name;
+        $message->sender = $request->sender;
         $message->msg = $request->msg;
 
+        // If the form allows file attachments
         // If a file is sent, get the path to the temporary folder
 /*         $msg->contactFile = $request->hasFile('contactFile')?
                             $request->file('contactFile')->getRealPath() :

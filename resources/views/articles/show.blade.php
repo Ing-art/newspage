@@ -1,6 +1,7 @@
 @extends('layouts.master')
 @section('title', 'Article')
 @section('body')
+
     <div class="container">
         <h1 class="text-center mt-3">{{ $article->headline }}</h1>
         <p class="text-center mt-1">by {{ $article->user->name }}
@@ -19,7 +20,7 @@
             Visits
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
               {{$article->visits}}
-              <span class="visually-hidden">Visits</span>
+              <span class="visually-hidden">Views</span>
             </span>
           </button>
         </div>
@@ -61,10 +62,9 @@
                 <div class="row d-flex justify-content-left">
                     <div class="col-md-12 col-lg-10 col-xl-8">
                         <div class="card">
-                            @empty($comments)
-                                <p>No comments yet</p> <!--FIXME No es veu-->
-                            @endempty
-
+                            @if(!$comments->count())
+                                <p>No comments yet</p>
+                            @endif
                             @foreach ($comments as $comment)
                                 <div class="card-body">
                                     <div class="d-flex flex-start align-items-left">
@@ -80,7 +80,7 @@
                                     <p class="mt-1 mb-1 pb-2 align-items-left">
                                         {{ $comment->text }}
                                     </p>
-                                    @can('delete', $comment)  
+                                    @can('delete', $comment)
                                     <form action="{{ route('comments.destroy', $comment->id) }}" method="POST"
                                         class="d-inline">
                                         @csrf
@@ -90,8 +90,8 @@
                                     @endcan
                                 </div>
                             @endforeach
-                            @can('create', App\Models\Comment::class)  
-                           
+                            @can('create', App\Models\Comment::class)
+
                             <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
                                 <form method="POST" action="{{ route('comments.store') }}">
                                     {{ csrf_field() }}
@@ -111,7 +111,7 @@
                                     </div>
                                 </form>
                             </div>
-                            
+
                             @endcan
                         </div>
                     </div>

@@ -24,7 +24,7 @@
                     <option value="{{ $subject }}" @selected(old('subject', $article->subject) == $subject)>
                         {{ $subject }}
                     </option>
-                    
+
                     @endforeach
                 </select>
             </div>
@@ -45,7 +45,7 @@
                     title="image of {{$article->headline}}" src="{{
                     $article->image ?
                     asset('storage/'.config('filesystems.articlesImageDir')).'/'.$article->image:
-                    asset('storage/'.config('filesystems.articlesImageDir')).'/default.jpg'}}"><!--FIXME-Les imatges no es guarden bé, es queden al tmp-->
+                    asset('storage/'.config('filesystems.articlesImageDir')).'/default.jpg'}}">
             </div>
 
             <div class="d-grid gap-2 col-3 d-md-block mt-4">

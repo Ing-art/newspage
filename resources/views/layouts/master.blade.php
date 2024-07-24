@@ -13,8 +13,12 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
     {{-- <script src="{{ asset('js/bootstrap.min.js') }}"></script> --}}
     <script src="{{ asset('js/bootstrap.bundle.js') }}"></script>
+
+
 
 </head>
 

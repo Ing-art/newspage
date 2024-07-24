@@ -13,12 +13,18 @@
                 <!-- Navigation Links -->
                 @can('create', App\Models\Article::class)
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('articles.create')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('articles.create')" :active="request()->routeIs('articles.create')">
                         {{ __('Create Article') }}
                     </x-nav-link>
                 </div>
+                @endcan
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('homepage')" :active="request()->routeIs('homepage')">
+                        {{ __('Madworld News') }}
+                    </x-nav-link>
+                </div>
             </div>
-            @endcan
+
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">

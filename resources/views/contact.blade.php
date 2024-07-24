@@ -14,7 +14,7 @@
         </div>
         <div class="form-group row">
             <label for="inputName" class="col-sm-2 col-form-label fw-bold">Name</label>
-            <input name="name" type="text" class="up form-control"
+            <input name="sender" type="text" class="up form-control"
             id="inputName" placeholder="Your Name..." maxlength="255" required="required"
             value="{{old('name')}}">
         </div>
@@ -34,9 +34,9 @@
             <input name="contactFile" type="file" class="form-control-file"
             accept="application/pdf" id="inputFile"> --}}
         </div><!--Buttons-->
-        <div class="form-group row">
-            <button type="submit" class="btn btn-dark m-2 mt-5 w-30">Send</button>
-            <button type="reset" class="btn btn-secondary m-2 mt-5 w-30">Clear</button>
+        <div class="form-group">
+            <button type="submit" class="btn btn-dark m-2 mt-5 w-10">Send</button>
+            <button type="reset" class="btn btn-secondary m-2 mt-5 w-10">Clear</button>
         </div>
     </form>
     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -93,7 +94,7 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
-        
+
         // Blocks the view if the article is rejected or has not been authorized by the editor
         if ($article->rejected == 1 || $article->published_at == NULL) {
             if (!Auth::check()) {
@@ -114,8 +115,8 @@ class ArticleController extends Controller
         }
 
         // Get the comments related to the article (relationship hasMany)
-        $comments = $article->comments()->get();
-
+        $comments = $article->comments()->orderby('created_at', 'ASC')->get();
+      //  dd($comments);
         return view('articles.show', ['article' => $article, 'comments' => $comments]);
     }
 
@@ -175,7 +176,7 @@ class ArticleController extends Controller
             // Delete the old image if it exists
             if ($article->image) {
                 $toDelete = config('filesystems.articlesImageDir') . '/' . $article->image;
-                Storage::delete($toDelete); // Delete the old image      
+                Storage::delete($toDelete); // Delete the old image
             }
 
             // Update the article's image in the database
@@ -236,7 +237,7 @@ class ArticleController extends Controller
 
         if ($article) {
 
-            $article->touch('published_at'); // Update the published_at value to now 
+            $article->touch('published_at'); // Update the published_at value to now
             $article->rejected = 0;
             $article->save();
 

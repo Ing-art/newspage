@@ -8,12 +8,14 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Address;
 
 class Contact extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $message; // message info
+    public $contact; // message info
+
 
     /**
      * Create a new message instance.
@@ -21,16 +23,11 @@ class Contact extends Mailable
     public function __construct($message)
     {
         //Create a new message instance
-        $this->message = $message;
-        dd($message); //FIXME
+        // $this->message = $message;
+        $this->contact = $message;
+
     }
 
-/*     public function build(){
-        return $this->from($this->message->email)
-                    ->subject('Message received: '.$this->message->subject)
-                    ->with('Madworld News')
-                    ->view('emails.contact');
-    } */
 
     /**
      * Get the message envelope.
@@ -38,7 +35,9 @@ class Contact extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: $this->message->subject,
+
+            from: new Address($this->contact->email, $this->contact->sender),
+            subject: $this->contact->subject,
         );
 
 
@@ -51,8 +50,12 @@ class Contact extends Mailable
     {
         return new Content(
             view: 'emails.contact',
-            with: ['body' => $this->message->msg,],
+            with: [
+                'contact'=> $this->contact,
+
+            ],
         );
+
     }
 
     /**

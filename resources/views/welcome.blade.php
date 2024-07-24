@@ -10,7 +10,7 @@
 
             <!--TOP NEWS-->
             <section class="col-12 mt-4 " id="headlines">
-                
+
                 <div class="block-title text-center">
                     <h4 class="h4 border-warning">
                         <span class="bg-warning bg-gradient text-black"><b>TOP NEWS</b></span>
@@ -30,11 +30,14 @@
                                     <a href="{{route('articles.show', $toparticle->id)}}" class="text-decoration-none text-light"><h3 class="card-title">{{$toparticle->headline}}</h3></a>
                                     <div>
                                         <span class="card-text d-none d-md-block">by {{$toparticle->user->name}} | {{\Carbon\carbon::parse($toparticle->published_at)->format('jS F Y')}}</span>
+                                        <small class="text-white d-none d-md-block">
+                                            <i class="fas fa-eye"></i> {{$toparticle->visits}}
+                                          </small>
                                         {{-- <span class="card-text d-none d-md-block">Published on {{\Carbon\carbon::parse($toparticle->published_at)->format('jS F Y')}}</span> --}}
                                     </div>
                                 </div>
                             </div>
-                        </article>              
+                        </article>
                 </div>
                 @endforeach
             </section>
@@ -49,7 +52,7 @@
                     <span class="bg-warning bg-gradient text-black"><b>OTHER NEWS</b></span>
                 </h4>
             </div>
-            
+
             <!--MORE NEWS CONTENT BLOCK-->
             <div class="container mt-5">
                 <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -75,6 +78,9 @@
                         </div>
                         <div class="card-footer text-white bg-dark">
                           <small class="text-white">{{\Carbon\carbon::parse($article->published_at)->format('jS F Y')}}</small>
+                          <small class="text-white d-none d-md-block">
+                            <i class="fas fa-eye"></i> {{$article->visits}}
+                          </small>
                         </div>
                       </div>
                     </div>
@@ -84,7 +90,7 @@
 
             <!--PAGINATION LINKS-->
 
-            <div class="col-12 d-flex justify-content-center mt-4">{{ $articles->links() }}</div>         
+            <div class="col-12 d-flex justify-content-center mt-4">{{ $articles->links() }}</div>
         </section>
     </div>
     @endsection
