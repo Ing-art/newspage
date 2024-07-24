@@ -59,8 +59,11 @@ class User extends Authenticatable implements MustVerifyEmail
         if(!is_array($rolenames))
             $rolenames = [$rolenames];
 
-        foreach($this->roles as $role){
-            if(in_array($role->role, $rolenames))
+        // Get the role names of the user
+        $userRoles = $this->roles->pluck('role')->toArray();
+
+        foreach($rolenames as $rolename){
+            if(in_array($rolename, $userRoles))
                 return true;
         }
 

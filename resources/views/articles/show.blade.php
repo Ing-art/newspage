@@ -35,7 +35,6 @@
                     @endif
 
                     @if (Auth::user()->can('delete', $article))
-                        <!--TODO QA check-->
                         <a class="mx-2" href="{{ route('articles.delete', $article->id) }}">
                             <button class="btn btn-danger">Delete</button></a>
                     @endif

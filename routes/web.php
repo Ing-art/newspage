@@ -66,9 +66,6 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 // Send Email from contact form
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.mail');
 
-// For blocked users
-Route::get('/blocked', [UserController::class, 'blocked'])->name('user.blocked');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

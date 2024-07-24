@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ArticlePublished;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Comment;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Auth\Access\AuthorizationException;
+use App\Events\ArticleRejected;
 
 class ArticleController extends Controller
 {
@@ -35,7 +37,12 @@ class ArticleController extends Controller
         }
 
         if ($request->user()->cant('create', Article::class))
-            abort(401, 'Unauthorized operation. You are not a writer'); //TODO Check
+            abort(401, 'Unauthorized operation. You are not a writer'); 
+
+        // If the user has been blocked
+        if ($request->user()->hasRole('blocked')) {
+            return redirect()->route('blocked');
+        }
 
         // Subjects for the select
         $subjects = [
@@ -108,15 +115,15 @@ class ArticleController extends Controller
         }
 
         // Increment Visits
-        $viewed = Session::get('viewed_article',[]);
-        if(!in_array($article->id, $viewed)){
+        $viewed = Session::get('viewed_article', []);
+        if (!in_array($article->id, $viewed)) {
             $article->increment('visits');
             Session::push('viewed_article', $article->id);
         }
 
         // Get the comments related to the article (relationship hasMany)
         $comments = $article->comments()->orderby('created_at', 'ASC')->get();
-      //  dd($comments);
+        //  dd($comments);
         return view('articles.show', ['article' => $article, 'comments' => $comments]);
     }
 
@@ -128,6 +135,11 @@ class ArticleController extends Controller
 
         if ($request->user()->cant('update', $article))
             abort(401, 'Unauthorized operation');
+
+        // If the user has been blocked
+        if ($request->user()->hasRole('blocked')) {
+            return redirect()->route('blocked');
+        }
 
         // Subjects for the select
         $subjects = [
@@ -154,6 +166,11 @@ class ArticleController extends Controller
 
         if ($request->user()->cant('update', $article))
             abort(401, 'Unauthorized operation');
+
+        // If the user has been blocked
+        if ($request->user()->hasRole('blocked')) {
+            return redirect()->route('blocked');
+        }
 
         $request->validate([
             'headline' => 'required|max:255',
@@ -204,6 +221,12 @@ class ArticleController extends Controller
             abort(401, 'Unauthorized operation');
 
 
+        // If the user has been blocked
+        if ($request->user()->hasRole('blocked')) {
+            return redirect()->route('blocked');
+        }
+
+
         return view('articles.delete', ['article' => $article]);
     }
 
@@ -216,13 +239,18 @@ class ArticleController extends Controller
         if ($request->user()->cant('delete', $article))
             abort(401, 'Unauthorized operation');
 
+        // If the user has been blocked
+        if ($request->user()->hasRole('blocked')) {
+            return redirect()->route('blocked');
+        }
+
 
         if ($article->delete() && $article->image) {
             Storage::delete(config('filesystems.articlesImageDir') . '/' . $article->image); // Delete the image
         }
 
         return redirect('homepage')
-            ->with('success', "Article successfully deleted"); //TODO check if image is deleted
+            ->with('success', "Article successfully deleted"); 
     }
 
     public function publish(Request $request, Article $article)
@@ -235,11 +263,19 @@ class ArticleController extends Controller
         if ($request->user()->cant('publish', $article))
             abort(401, 'Unauthorized operation. You are not an editor');
 
+        // If the user has been blocked
+        if ($request->user()->hasRole('blocked')) {
+            return redirect()->route('blocked');
+        }
+
         if ($article) {
 
             $article->touch('published_at'); // Update the published_at value to now
             $article->rejected = 0;
             $article->save();
+
+            ArticlePublished::dispatch($article); 
+   
 
             return back()->with('success', 'The article is now live!');
         }
@@ -256,7 +292,14 @@ class ArticleController extends Controller
         if ($request->user()->cant('reject', $article))
             abort(401, 'Unauthorized operation. You are not an editor');
 
+        // If the user has been blocked
+        if ($request->user()->hasRole('blocked')) {
+            return redirect()->route('blocked');
+        }
+
         if ($article) {
+
+            ArticleRejected::dispatch($article); 
 
             $article->rejected = 1;
             $article->save();

@@ -2,7 +2,7 @@
 @extends('layouts.master')
 @section('title', 'New Article')
 @section('body')
-<h1 class="text-center mt-3">Edit article</h1><!--TODO QA check-->
+<h1 class="text-center mt-3">Edit article</h1>
 <div class="container">
     <div class="row justify-content-center">
         <form class="my-2 p-5" method="POST" action="{{route('articles.update', $article->id)}}"

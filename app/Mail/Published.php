@@ -8,17 +8,22 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Article;
+use Illuminate\Mail\Mailables\Address;
 
 class Published extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $published; 
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(Article $article)
     {
-        //
+        $this->published = $article;
+
     }
 
     /**
@@ -27,7 +32,10 @@ class Published extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Published',
+            from: new Address($this->published->user->email),
+            subject: 'Your Article Has Been Published',
+            
+
         );
     }
 
@@ -37,7 +45,10 @@ class Published extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.published',
+            with: [
+                'published' => $this->published,
+            ]
         );
     }
 

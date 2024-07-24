@@ -30,7 +30,7 @@ class CommentPolicy
     public function create(User $user): bool
     {
         // Only verified readers can comment
-        return ($user->hasRole('reader') && $user->email_verified_at != NULL);
+        return $user->hasRole('reader') && $user->email_verified_at != NULL;
     }
 
     /**

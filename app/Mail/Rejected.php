@@ -8,17 +8,21 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Article;
+use Illuminate\Mail\Mailables\Address;
 
 class Rejected extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $rejected;
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(Article $article)
     {
-        //
+        $this->rejected = $article;
     }
 
     /**
@@ -27,7 +31,8 @@ class Rejected extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Rejected',
+            from: new Address($this->rejected->user->email),
+            subject: 'Your Article Has Been Rejected',
         );
     }
 
@@ -37,7 +42,10 @@ class Rejected extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.rejected',
+            with:[
+                'rejected' => $this->rejected,
+            ]
         );
     }
 
