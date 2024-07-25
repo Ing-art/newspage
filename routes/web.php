@@ -52,6 +52,7 @@ Route::get('articles/{article}/reject',[ArticleController::class, 'reject'])
 /* Route::get('user/{user}/details', [AdminController::class, 'userShow'])
 ->middleware('is_admin')->name('admin.users.show'); */
 
+
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('is_admin')->group(function(){
@@ -71,6 +72,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Blocked users
+
+Route::get('/blocked', [UserController::class, 'blocked'])->name('blocked');
 
 require __DIR__.'/auth.php';
 

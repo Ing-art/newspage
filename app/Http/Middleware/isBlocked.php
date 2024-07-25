@@ -23,6 +23,6 @@ class isBlocked
         // If the user is blocked and tries to access a forbidden route
         if($user && $user->hasRole('blocked') && !in_array($route, $this->allowed))
             return redirect()->route('user.blocked');
-        return $next($request);
+        return $next($request); // TODO
     }
 }
