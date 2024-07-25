@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Url;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Events\ArticleRejected;
@@ -37,7 +38,7 @@ class ArticleController extends Controller
         }
 
         if ($request->user()->cant('create', Article::class))
-            abort(401, 'Unauthorized operation. You are not a writer'); 
+            abort(401, 'Unauthorized operation. You are not a writer');
 
         // If the user has been blocked
         if ($request->user()->hasRole('blocked')) {
@@ -226,6 +227,9 @@ class ArticleController extends Controller
             return redirect()->route('blocked');
         }
 
+        // Remember the current user's url
+        Session::put('returnTo', URL::previous());
+
 
         return view('articles.delete', ['article' => $article]);
     }
@@ -249,8 +253,15 @@ class ArticleController extends Controller
             Storage::delete(config('filesystems.articlesImageDir') . '/' . $article->image); // Delete the image
         }
 
-        return redirect('homepage')
-            ->with('success', "Article successfully deleted"); 
+/*         return redirect('homepage')
+            ->with('success', "Article successfully deleted"); */
+
+            $redirect = Session::has('returnTo') ?
+                redirect(Session::get('returnTo')) :
+                redirect()->route('dasboard');
+            Session::remove('returnTo');  //delete the session variable
+
+            return $redirect->with('success', 'Article successfuly deleted');
     }
 
     public function publish(Request $request, Article $article)
@@ -274,8 +285,8 @@ class ArticleController extends Controller
             $article->rejected = 0;
             $article->save();
 
-            ArticlePublished::dispatch($article); 
-   
+            ArticlePublished::dispatch($article);
+
 
             return back()->with('success', 'The article is now live!');
         }
@@ -299,7 +310,7 @@ class ArticleController extends Controller
 
         if ($article) {
 
-            ArticleRejected::dispatch($article); 
+            ArticleRejected::dispatch($article);
 
             $article->rejected = 1;
             $article->save();
