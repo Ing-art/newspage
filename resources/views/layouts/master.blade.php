@@ -155,7 +155,7 @@
 
             <!--FOOTER SECTION -->
 
-            <footer class="page-footer font-small p-4 bg-light">
+            <footer class="page-footer font-small p-4 bg-light me-4">
                 <p class="text-end small">
                     Created with <b>Laravel</b> and <b>Bootstrap</b> by <i>{{ $author }}</i>
                     <!--Defined in AppServiceProvider-->
