@@ -18,8 +18,8 @@
             </div>
 
             <!--TOP NEWS CAROUSEL-->
-            <div class="col-12 col-md-9 col-lg-9 mx-auto carousel slide card-group row row-cols-1 row-cols-md-2 g-4" id="carouselExampleInterval" data-bs-ride="carousel">
-              <div class="carousel-inner"> <!--FIXME carrousel card loop-->
+            {{-- <div class="col-12 col-md-9 col-lg-9 mx-auto carousel slide card-group row row-cols-1 row-cols-md-2 g-4" id="carouselExampleInterval" data-bs-ride="carousel">
+              <div class="carousel-inner"> 
                 @foreach ($toparticles as $article)
                 @if($loop->first)
                 <div class="justify-content-center carousel-item active carousel-item bg-lg-shadow rounded position-relative" data-bs-interval="7000">
@@ -53,7 +53,35 @@
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Next</span>
             </button>            
-            </div>
+            </div> --}}
+            
+            <div class="col-12 col-md-9 col-lg-9 mx-auto carousel slide card-group row row-cols-1 row-cols-md-2 g-4" id="carouselExampleInterval" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                  @foreach ($toparticles as $article)
+                    <div class="justify-content-center carousel-item bg-lg-shadow rounded position-relative overflow-hidden @if($loop->first) active @endif" data-bs-interval="7000">
+                      <img src="{{ $article->image 
+                                ? asset('storage/' . config('filesystems.articlesImageDir')) . '/' . $article->image
+                                        : asset('storage/' . config('filesystems.articlesImageDir')) . '/default.jpg' }}"
+                           class="d-block w-100 rounded" style="width: 100%; max-height: 700px; object-fit:cover" alt="{{$article->headline}}">
+                      <div class="bg-lg-shadow position-absolute w-100-h-100" style="bottom:0;"></div>
+                      <div class="carousel-caption">
+                        <a href="{{ route('articles.show', $article->id) }}"
+                            class="text-decoration-none link-light"><h2 class="d-block">{{$article->headline}}</h2></a>
+                        <p class="d-none d-md-block">by {{$article->user->name}} | published {{ \Carbon\Carbon::parse($article->published_at)->format('jS F Y') }}</p>
+                      </div>
+                    </div>
+                  @endforeach
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+                         
         </section>
     @endif
 
@@ -63,7 +91,7 @@
 
         <div class="block-title text-center">
             <h4 class="h4 border-warning">
-                <span class="bg-warning bg-gradient text-black"><b>OTHER NEWS</b></span>
+                <span class="bg-warning bg-gradient text-black"><b>MORE NEWS</b></span>
             </h4>
         </div>
 

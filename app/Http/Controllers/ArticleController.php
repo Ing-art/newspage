@@ -320,5 +320,51 @@ class ArticleController extends Controller
 
         return back()->with('message', 'something went wrong');
     }
+
+    public function maketopnews(Request $request, Article $article)
+    {
+
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Please log in'); 
+        }
+
+        if ($request->user()->cant('reject', $article))
+            abort(401, 'Unauthorized operation. You are not an editor');
+
+        // If the user has been blocked
+        if ($request->user()->hasRole('blocked')) {
+            return redirect()->route('blocked');
+        }
+
+        $article->istopnews = 1;
+        $article->save();
+
+        return back()->with('success', 'The article has been flagged as top news');
+         
+    }
+
+    public function removetopnews(Request $request, Article $article)
+    {
+
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Please log in'); 
+        }
+
+        if ($request->user()->cant('reject', $article))
+            abort(401, 'Unauthorized operation. You are not an editor');
+
+        // If the user has been blocked
+        if ($request->user()->hasRole('blocked')) {
+            return redirect()->route('blocked');
+        }
+
+        $article->istopnews = 0;
+        $article->save();
+
+        return back()->with('success', 'The article has been removed from news');
+         
+    }
+
+
 }
 

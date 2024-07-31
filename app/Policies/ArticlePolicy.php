@@ -44,4 +44,13 @@ class ArticlePolicy
 
         return ($user->hasRole('editor') && $user->email_verified_at !=NULL);
     }
+
+    // Only a verified editor can flag an article as topnews
+    public function maketopnews(User $user, Article $article){
+        return ($user->hasRole('editor') && $user->email_verified_at !=NULL);
+    }
+
+    public function removetopnews(User $user, Article $article){
+        return ($user->hasRole('editor') && $user->email_verified_at !=NULL);
+    }
 }

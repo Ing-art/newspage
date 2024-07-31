@@ -155,8 +155,8 @@
 
             <!--FOOTER SECTION -->
 
-            <footer class="page-footer font-small p-4 bg-light me-4">
-                <p class="text-end small">
+            <footer class="page-footer font-small p-4 bg-light text-end " >
+                <p class="text-end small" style="margin-right:80px;">
                     Created with <b>Laravel</b> and <b>Bootstrap</b> by <i>{{ $author }}</i>
                     <!--Defined in AppServiceProvider-->
                 </p>

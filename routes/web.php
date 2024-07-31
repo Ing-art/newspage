@@ -43,6 +43,14 @@ Route::get('articles/{article}/publish',[ArticleController::class, 'publish'])
 Route::get('articles/{article}/reject',[ArticleController::class, 'reject'])
     ->middleware(['auth', 'verified'])->name('articles.reject');
 
+// Make Top News
+Route::get('articles/{article}/maketopnews', [ArticleController::class, 'maketopnews'])
+    ->middleware(['auth', 'verified'])->name('articles.maketopnews');
+
+// Remove from Top News
+Route::get('articles/{article}/removetopnews', [ArticleController::class, 'removetopnews'])
+    ->middleware(['auth', 'verified'])->name('articles.removetopnews');
+
 // Original Breeze Dashboard Route
 /* Route::get('/dashboard', function () {
     return view('dashboard');

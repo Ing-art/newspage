@@ -312,6 +312,18 @@
                                                     <button class="btn btn-success">Publish</button>
                                                 </a>
                                             @endif
+                                            @if (Auth::user()->can('maketopnews', $article) && ($article->published_at == null || $article->istopnews == 0))
+                                                <a class="mx-2"
+                                                    href="{{ route('articles.maketopnews', $article->id) }}">
+                                                    <button class="btn btn-success">Top News</button>
+                                                </a>
+                                            @endif
+                                            @if (Auth::user()->can('removetopnews', $article) && ($article->published_at == null && $article->istopnews == 1))
+                                            <a class="mx-2"
+                                                href="{{ route('articles.removetopnews', $article->id) }}">
+                                                <button class="btn btn-danger">Remove Top News</button>
+                                            </a>
+                                        @endif
                                         </td>
                                     </tr>
                                 @empty

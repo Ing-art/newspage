@@ -7,7 +7,7 @@
         <p class="text-center mt-1">by {{ $article->user->name }}
         <p class="text-center mt-1>">Published on {{ \Carbon\carbon::parse($article->published_at)->format('jS F Y') }}</p>
         <figure class="text-center">
-            <image class="img-fluid rounded"
+            <image class="img-fluid rounded" style="max-width: 100%; max-height: 600px; object-fit:cover"
                 src="{{ $article->image
                     ? asset('storage/' . config('filesystems.articlesImageDir')) . '/' . $article->image
                     : asset('storage/' . config('filesystems.articlesImageDir')) . '/default.jpg' }}">
@@ -49,6 +49,18 @@
                         <a class="mx-2" href="{{ route('articles.publish', $article->id) }}">
                             <button class="btn btn-success">Publish</button>
                         </a>
+                    @endif
+
+                    @if (Auth::user()->can('maketopnews', $article) && ($article->published_at == NULL || $article->istopnews == 0))
+                        <a class="mx-2" href="{{ route('articles.maketopnews', $article->id) }}">
+                            <button class="btn btn-success">Top News</button>
+                        </a>
+                    @endif
+
+                    @if (Auth::user()->can('removetopnews', $article) && ($article->published_at == NULL || $article->istopnews == 1))
+                    <a class="mx-2" href="{{ route('articles.removetopnews', $article->id) }}">
+                        <button class="btn btn-danger">Remove Top News</button>
+                    </a>
                     @endif
                 </div>
             </div>
