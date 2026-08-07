@@ -22,7 +22,7 @@
 
 </head>
 
-<body class="m-3">
+<body class="publication-site">
 {{--     @env(['local', 'test'])
     <div class="alert alert-warning text-center">
         <p><b>ATTENTION: </b>in local / test mode </p>
@@ -34,15 +34,17 @@
         {{-- @php($page = $page ?? '') --}}
         @php($page = Route::currentRouteName())
 
-        <div class="container-fluid ">
-            <div class="logo-wrapper ">
-                <h1 class="display-1 text-center border">
-                    <a class="text-decoration-none logo text-center" href="index.php">MadWorld News</a>
+        <header class="site-header">
+        <div class="container-xl px-3 px-lg-4">
+            <div class="logo-wrapper text-center">
+                <p class="masthead-kicker mb-2">Independent stories · Global perspective</p>
+                <h1 class="site-title mb-0">
+                    <a class="logo" href="{{ route('homepage') }}">MadWorld News</a>
                 </h1>
             </div>
-            <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-                <div class="container-fluid">
-                    <a class="navbar-brand {{ $page == 'homepage' ? 'active' : '' }}" href="{{ route('homepage') }}">MWN</a>
+            <nav class="navbar navbar-expand-md navbar-dark site-navbar" aria-label="Main navigation">
+                <div class="container-fluid px-3 px-md-4">
+                    <a class="navbar-brand {{ $page == 'homepage' ? 'active' : '' }}" href="{{ route('homepage') }}">Home</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -113,8 +115,10 @@
                 </div>
             </nav>
         @show
+        </div>
+        </header>
 
-        <main>
+        <main class="container-xl px-3 px-lg-4">
 
 
             <!--Success and Error messages -->
@@ -141,12 +145,12 @@
             @yield('body')
 
             @section('link')
-                <div class="text-center">
-                    <span class="mb-5 mx-5">
+                <div class="page-links d-flex justify-content-center gap-4">
+                    <span>
                         <a href="#">Back to top</a>
                     </span>
                     @if ($page != 'homepage')
-                    <span class="mb-5 mx-5 text-center">
+                    <span>
                         <a href="{{ url()->previous() }}">Back</a>
                     </span>
                     @endif
@@ -155,8 +159,8 @@
 
             <!--FOOTER SECTION -->
 
-            <footer class="page-footer font-small p-4 bg-light text-end " >
-                <p class="text-end small" style="margin-right:80px;">
+            <footer class="page-footer">
+                <p class="small mb-0">
                     Created with <b>Laravel</b> and <b>Bootstrap</b> by <i>{{ $author }}</i>
                     <!--Defined in AppServiceProvider-->
                 </p>
