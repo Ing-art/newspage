@@ -39,6 +39,7 @@ RUN composer install \
         storage/framework/sessions \
         storage/framework/views \
         storage/logs \
+    && php artisan storage:link \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
