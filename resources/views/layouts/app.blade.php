@@ -7,24 +7,20 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!--CSS files-->
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
-
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- Editorial theme -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <body class="breeze-body antialiased">
+        <div class="breeze-shell min-h-screen">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
+                <header class="breeze-page-header">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -32,7 +28,7 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main class="breeze-content">
                 {{ $slot }}
             </main>
         </div>

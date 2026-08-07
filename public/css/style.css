@@ -385,6 +385,682 @@ svg {
     text-align: right;
 }
 
+/* Contact page */
+
+.contact-page {
+    padding: clamp(3.5rem, 8vw, 7rem) 0 clamp(2rem, 5vw, 4rem);
+}
+
+.contact-layout {
+    align-items: start;
+    display: grid;
+    gap: clamp(3rem, 8vw, 7rem);
+    grid-template-columns: minmax(0, 0.86fr) minmax(28rem, 1.14fr);
+    margin: 0 auto;
+    max-width: 68rem;
+}
+
+.contact-intro {
+    padding-top: 1rem;
+    position: sticky;
+    top: 2rem;
+}
+
+.contact-intro h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 700;
+    letter-spacing: -0.06em;
+    line-height: 0.98;
+    margin-bottom: 1.6rem;
+    text-wrap: balance;
+}
+
+.contact-lead {
+    color: var(--news-muted);
+    font-size: 1rem;
+    line-height: 1.8;
+    max-width: 31rem;
+}
+
+.contact-note {
+    align-items: center;
+    border-top: 1px solid var(--news-rule);
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.2rem;
+    padding-top: 1.4rem;
+}
+
+.contact-note-mark {
+    align-items: center;
+    background: var(--news-ink);
+    color: #fff;
+    display: inline-flex;
+    flex: 0 0 3rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    height: 3rem;
+    justify-content: center;
+    letter-spacing: 0.08em;
+}
+
+.contact-note h2 {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.2rem;
+    text-transform: uppercase;
+}
+
+.contact-note p {
+    color: var(--news-muted);
+    font-size: 0.8rem;
+    line-height: 1.45;
+}
+
+.contact-form-panel {
+    background: var(--news-surface);
+    border: 1px solid var(--news-rule);
+    border-radius: var(--news-radius);
+    box-shadow: var(--news-shadow);
+    padding: clamp(1.6rem, 5vw, 3rem);
+}
+
+.contact-form-heading {
+    border-bottom: 1px solid var(--news-rule);
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.4rem;
+}
+
+.contact-form-heading h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.8rem, 3vw, 2.35rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    margin-bottom: 0.35rem;
+}
+
+.contact-form-heading > p:last-child {
+    color: var(--news-muted);
+    font-size: 0.78rem;
+    margin-bottom: 0;
+}
+
+.contact-field {
+    margin-bottom: 1.25rem;
+}
+
+.contact-field .form-label {
+    color: #3d3b37;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+}
+
+.contact-field .form-control {
+    background: #fff;
+    border: 1px solid #bbb7ae;
+    border-radius: 0.35rem;
+    color: var(--news-ink);
+    font-size: 0.92rem;
+    min-height: 3.15rem;
+    padding: 0.75rem 0.9rem;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.contact-field textarea.form-control {
+    line-height: 1.6;
+    min-height: 10rem;
+    resize: vertical;
+}
+
+.contact-field .form-control::placeholder {
+    color: #99958d;
+}
+
+.contact-field .form-control:focus {
+    border-color: var(--news-accent);
+    box-shadow: 0 0 0 0.2rem rgba(143, 36, 50, 0.13);
+}
+
+.contact-field-help {
+    color: var(--news-muted);
+    font-size: 0.68rem;
+    margin-top: 0.4rem;
+    text-align: right;
+}
+
+.contact-actions {
+    border-top: 1px solid var(--news-rule);
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+}
+
+.contact-submit,
+.contact-reset {
+    border-radius: var(--news-radius);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    min-height: 3rem;
+    padding-left: 1.35rem;
+    padding-right: 1.35rem;
+    text-transform: uppercase;
+}
+
+.contact-submit {
+    background: var(--news-ink);
+    color: #fff;
+}
+
+.contact-submit:hover,
+.contact-submit:focus {
+    background: var(--news-accent);
+    color: #fff;
+}
+
+.contact-reset {
+    background: transparent;
+    border-color: #bbb7ae;
+    color: var(--news-muted);
+}
+
+.contact-reset:hover,
+.contact-reset:focus {
+    background: #efede7;
+    border-color: #99958d;
+    color: var(--news-ink);
+}
+
+/* Breeze authentication and account layouts */
+
+.breeze-body {
+    background: var(--news-paper);
+    color: var(--news-ink);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.auth-shell {
+    background: var(--news-surface);
+    display: grid;
+    grid-template-columns: minmax(22rem, 0.88fr) minmax(30rem, 1.12fr);
+}
+
+.auth-editorial-panel {
+    background: var(--news-ink);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    isolation: isolate;
+    justify-content: space-between;
+    overflow: hidden;
+    padding: clamp(2rem, 5vw, 4.5rem);
+    position: relative;
+}
+
+.auth-editorial-panel::after {
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 50%;
+    content: "";
+    height: min(42vw, 38rem);
+    position: absolute;
+    right: min(-19vw, -10rem);
+    top: 18%;
+    width: min(42vw, 38rem);
+    z-index: -1;
+}
+
+.auth-brand {
+    color: #fff;
+    display: inline-block;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.auth-brand:hover,
+.auth-brand:focus {
+    color: #f2c9cf;
+}
+
+.auth-editorial-copy {
+    max-width: 35rem;
+    padding: 5rem 0;
+}
+
+.auth-eyebrow,
+.auth-panel-footer {
+    color: #f2c9cf;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.auth-editorial-copy h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(3rem, 6vw, 6.2rem);
+    font-weight: 700;
+    letter-spacing: -0.065em;
+    line-height: 0.9;
+    margin: 1.4rem 0 2rem;
+}
+
+.auth-editorial-copy > p:last-child {
+    color: rgba(255, 255, 255, 0.64);
+    font-size: clamp(0.95rem, 1.4vw, 1.08rem);
+    line-height: 1.75;
+    max-width: 29rem;
+}
+
+.auth-panel-footer {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.auth-main {
+    align-items: center;
+    background: var(--news-paper);
+    display: flex;
+    justify-content: center;
+    padding: clamp(2.5rem, 7vw, 6rem);
+    width: 100%;
+}
+
+.auth-form-wrap {
+    max-width: 31rem;
+    width: 100%;
+}
+
+.auth-mobile-brand {
+    color: var(--news-ink);
+    display: none;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    text-decoration: none;
+}
+
+.auth-intro {
+    margin-bottom: 2.25rem;
+}
+
+.auth-intro h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2.4rem, 5vw, 3.45rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 0.75rem;
+}
+
+.auth-intro > p:last-child {
+    color: var(--news-muted);
+    font-size: 0.95rem;
+    margin: 0;
+    max-width: 27rem;
+}
+
+.auth-card {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+}
+
+.auth-card a:not(.editorial-button) {
+    color: var(--news-muted);
+    text-decoration-color: #b8b3aa;
+}
+
+.auth-card a:not(.editorial-button):hover,
+.auth-card a:not(.editorial-button):focus {
+    color: var(--news-accent);
+}
+
+.auth-card input[type="checkbox"] {
+    border-color: #bcb8b0;
+    color: var(--news-accent);
+}
+
+.auth-card input[type="checkbox"]:focus {
+    --tw-ring-color: rgba(143, 36, 50, 0.25);
+}
+
+.auth-return {
+    color: var(--news-muted);
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    margin-top: 2.5rem;
+    text-align: left;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.auth-return:hover,
+.auth-return:focus {
+    color: var(--news-accent);
+}
+
+.breeze-shell {
+    background: var(--news-paper);
+}
+
+.breeze-nav {
+    background: var(--news-ink);
+    border-bottom: 3px solid var(--news-accent);
+    color: #fff;
+}
+
+.breeze-nav-inner {
+    min-height: 4.5rem;
+}
+
+.breeze-brand {
+    align-items: center;
+    color: #fff;
+    display: inline-flex;
+    gap: 0.7rem;
+    text-decoration: none;
+}
+
+.breeze-brand:hover,
+.breeze-brand:focus {
+    color: #fff;
+}
+
+.breeze-brand-mark {
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 0.32rem 0.42rem;
+}
+
+.breeze-brand-name {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.editorial-nav-link {
+    border-bottom: 2px solid transparent;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.07em;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.editorial-nav-link:hover,
+.editorial-nav-link:focus,
+.editorial-nav-link.is-active {
+    border-bottom-color: var(--news-accent);
+    color: #fff;
+}
+
+.breeze-user-trigger {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: var(--news-radius);
+    color: rgba(255, 255, 255, 0.82);
+    transition: border-color 160ms ease, color 160ms ease;
+}
+
+.breeze-user-trigger:hover,
+.breeze-user-trigger:focus {
+    border-color: rgba(255, 255, 255, 0.65);
+    color: #fff;
+    outline: none;
+}
+
+.breeze-menu-toggle {
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: var(--news-radius);
+    color: #fff;
+}
+
+.breeze-menu-toggle:hover,
+.breeze-menu-toggle:focus {
+    background: rgba(255, 255, 255, 0.08);
+    outline: none;
+}
+
+.editorial-responsive-link {
+    border-left: 3px solid transparent;
+    color: rgba(255, 255, 255, 0.72);
+    text-decoration: none;
+}
+
+.editorial-responsive-link:hover,
+.editorial-responsive-link:focus,
+.editorial-responsive-link.is-active {
+    background: rgba(255, 255, 255, 0.06);
+    border-left-color: var(--news-accent);
+    color: #fff;
+}
+
+.breeze-mobile-account {
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.breeze-mobile-account .text-gray-800,
+.breeze-mobile-account .text-gray-200 {
+    color: #fff !important;
+}
+
+.breeze-mobile-account .text-gray-500 {
+    color: rgba(255, 255, 255, 0.58) !important;
+}
+
+.editorial-dropdown-link {
+    color: var(--news-ink);
+    text-decoration: none;
+}
+
+.editorial-dropdown-link:hover,
+.editorial-dropdown-link:focus {
+    background: #f0ede7;
+    color: var(--news-accent);
+    outline: none;
+}
+
+.breeze-page-header {
+    background: var(--news-surface);
+    border-bottom: 1px solid var(--news-rule);
+}
+
+.breeze-page-header h1,
+.breeze-page-header h2 {
+    color: var(--news-ink) !important;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.7rem, 4vw, 2.35rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+.breeze-content {
+    color: var(--news-ink);
+}
+
+.breeze-content .bg-white,
+.breeze-content .dark\:bg-gray-800 {
+    background: var(--news-surface) !important;
+}
+
+.breeze-content .shadow,
+.breeze-content .shadow-sm {
+    border: 1px solid var(--news-rule);
+    box-shadow: 0 0.35rem 1.2rem rgba(22, 22, 22, 0.055) !important;
+}
+
+.breeze-content .text-gray-900,
+.breeze-content .text-gray-800,
+.breeze-content .dark\:text-gray-100,
+.breeze-content .dark\:text-gray-200 {
+    color: var(--news-ink) !important;
+}
+
+.breeze-content .text-gray-600,
+.breeze-content .text-gray-500,
+.breeze-content .dark\:text-gray-400 {
+    color: var(--news-muted) !important;
+}
+
+.editorial-label {
+    color: #3d3b37;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.editorial-input {
+    background: #fff;
+    border: 1px solid #bdb9b0;
+    color: var(--news-ink);
+    border-radius: 0.35rem !important;
+    min-height: 3.15rem;
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.editorial-input:focus {
+    border-color: var(--news-accent);
+    box-shadow: 0 0 0 0.2rem rgba(143, 36, 50, 0.14);
+    outline: none;
+    --tw-ring-color: transparent;
+}
+
+.editorial-input:disabled {
+    background: #ece9e3;
+}
+
+.editorial-input-error {
+    color: #a51d2d;
+    margin-bottom: 0;
+    padding-left: 1.1rem;
+}
+
+.editorial-button {
+    border: 1px solid transparent;
+    border-radius: var(--news-radius);
+    justify-content: center;
+    letter-spacing: 0.08em;
+    min-height: 3rem;
+    text-decoration: none;
+    transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.editorial-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(143, 36, 50, 0.18);
+    outline: none;
+}
+
+.editorial-button-primary {
+    background: var(--news-ink);
+    color: #fff;
+}
+
+.editorial-button-primary:hover,
+.editorial-button-primary:focus {
+    background: var(--news-accent);
+    color: #fff;
+}
+
+.editorial-button-secondary {
+    background: #fff;
+    border-color: #bdb9b0;
+    color: var(--news-ink);
+}
+
+.editorial-button-secondary:hover,
+.editorial-button-secondary:focus {
+    background: #efede7;
+    border-color: #9e9990;
+}
+
+.editorial-button-danger {
+    background: #a51d2d;
+    color: #fff;
+}
+
+.editorial-button-danger:hover,
+.editorial-button-danger:focus {
+    background: #801522;
+    color: #fff;
+}
+
+.auth-form-actions {
+    border-top: 1px solid var(--news-rule);
+    gap: 1rem;
+    padding-top: 1.5rem;
+}
+
+.auth-form-actions > a {
+    font-size: 0.78rem;
+}
+
+.auth-submit {
+    min-width: 8.5rem;
+}
+
+.auth-alternative {
+    color: var(--news-muted);
+    font-size: 0.82rem;
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.auth-alternative a {
+    font-weight: 700;
+    margin-left: 0.2rem;
+}
+
+@media (max-width: 991.98px) {
+    .contact-layout {
+        gap: 2.5rem;
+        grid-template-columns: 1fr;
+        max-width: 42rem;
+    }
+
+    .contact-intro {
+        position: static;
+    }
+
+    .contact-lead {
+        max-width: 38rem;
+    }
+
+    .auth-shell {
+        grid-template-columns: minmax(17rem, 0.72fr) minmax(26rem, 1.28fr);
+    }
+
+    .auth-editorial-panel {
+        padding: 2.25rem;
+    }
+
+    .auth-editorial-copy h2 {
+        font-size: clamp(2.8rem, 7vw, 4.4rem);
+    }
+
+    .auth-main {
+        padding: 3rem;
+    }
+}
+
 @media (max-width: 767.98px) {
     .logo-wrapper {
         padding: 1.6rem 0 1.25rem;
@@ -430,6 +1106,68 @@ svg {
     .hero-carousel .carousel-control-prev,
     .hero-carousel .carousel-control-next {
         display: none;
+    }
+
+    .contact-page {
+        padding-top: 2.75rem;
+    }
+
+    .contact-intro h1 {
+        font-size: clamp(2.55rem, 13vw, 3.6rem);
+    }
+
+    .contact-note {
+        align-items: flex-start;
+    }
+
+    .contact-form-panel {
+        padding: 1.35rem;
+    }
+
+    .contact-submit,
+    .contact-reset {
+        width: 100%;
+    }
+
+    .breeze-brand-name {
+        display: none;
+    }
+
+    .auth-shell {
+        display: block;
+    }
+
+    .auth-editorial-panel {
+        display: none;
+    }
+
+    .auth-main {
+        align-items: start;
+        min-height: 100vh;
+        padding: 1.5rem 1.25rem 2.5rem;
+    }
+
+    .auth-mobile-brand {
+        display: inline-block;
+        margin-bottom: 3.5rem;
+    }
+
+    .auth-card {
+        padding: 0;
+    }
+
+    .auth-form-actions {
+        align-items: stretch;
+        flex-direction: column-reverse;
+    }
+
+    .auth-form-actions > a {
+        text-align: center;
+    }
+
+    .auth-form-actions .auth-submit {
+        margin-left: 0 !important;
+        width: 100%;
     }
 }
 
