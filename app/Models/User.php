@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail; // User must have a verified email
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Notifications\QueuedResetPassword;
+use App\Notifications\QueuedVerifyEmail;
 
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -97,6 +99,23 @@ class User extends Authenticatable implements MustVerifyEmail
     // Get the comments of the user
     public function comments(){
         return $this->hasMany('App\Models\Comment');
+    }
+
+    /**
+     * Queue verification email delivery so temporary SMTP limits do not
+     * interrupt registration.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new QueuedVerifyEmail());
+    }
+
+    /**
+     * Queue password reset email delivery for the same reason.
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new QueuedResetPassword($token));
     }
 
 }

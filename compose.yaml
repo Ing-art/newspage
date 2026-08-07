@@ -1,5 +1,6 @@
 services:
   app:
+    image: newspage-app
     build:
       context: .
     env_file:
@@ -25,6 +26,21 @@ services:
     volumes:
       - .:/var/www/html
       - node_modules:/var/www/html/node_modules
+    restart: unless-stopped
+
+  worker:
+    image: newspage-app
+    env_file:
+      - .env.docker
+    command: php artisan queue:work --sleep=3 --tries=3 --backoff=5 --timeout=60
+    volumes:
+      - .:/var/www/html
+      - ./.env.docker:/var/www/html/.env:ro
+      - ./storage/app/public:/var/www/html/public/storage
+      - composer_vendor:/var/www/html/vendor
+    depends_on:
+      db:
+        condition: service_healthy
     restart: unless-stopped
 
   db:

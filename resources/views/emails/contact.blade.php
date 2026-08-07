@@ -2,12 +2,14 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <!--Bootstrap CSS-->
         <style>
-            @php
-                include 'css/bootstrap.css'
-            @endphp
-
+            body { background: #f7f6f2; color: #171717; font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 32px; }
+            main { background: #ffffff; border: 1px solid #dedbd3; margin: 24px auto; max-width: 640px; padding: 32px; }
+            h1, h2 { font-family: Georgia, serif; }
+            h1 { color: #8f2432; margin: 0 auto; max-width: 706px; }
+            h2 { margin-top: 0; }
+            a { color: #8f2432; }
+            footer { color: #696969; font-size: 12px; margin: 0 auto; max-width: 706px; }
         </style>
     </head>
     <body class="container p-3">

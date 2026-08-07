@@ -28,7 +28,7 @@ class ContactController extends Controller
                             $request->file('contactFile')->getRealPath() :
                             NULL; */
 
-        Mail::to(config('mail.admin_email'))->send(new Contact($message));
+        Mail::to(config('mail.admin_email'))->queue(new Contact($message));
 
         return redirect()
             ->route('homepage')

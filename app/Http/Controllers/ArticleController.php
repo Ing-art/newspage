@@ -279,6 +279,11 @@ class ArticleController extends Controller
             return redirect()->route('blocked');
         }
 
+        // Repeated requests must not publish or notify twice.
+        if ($article->published_at !== null && $article->rejected == 0) {
+            return back()->with('success', 'The article is already live.');
+        }
+
         if ($article) {
 
             $article->touch('published_at'); // Update the published_at value to now
@@ -306,6 +311,11 @@ class ArticleController extends Controller
         // If the user has been blocked
         if ($request->user()->hasRole('blocked')) {
             return redirect()->route('blocked');
+        }
+
+        // Repeated requests must not reject or notify twice.
+        if ($article->rejected == 1) {
+            return back()->with('success', 'The article is already rejected.');
         }
 
         if ($article) {

@@ -8,8 +8,17 @@ use App\Events\ArticlePublished;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Published;
 
-class SendPublicationNotice
+class SendPublicationNotice implements ShouldQueue
 {
+    use InteractsWithQueue;
+
+    public int $tries = 3;
+
+    public function backoff(): array
+    {
+        return [5, 15, 30];
+    }
+
     /**
      * Create the event listener.
      */

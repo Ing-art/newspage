@@ -8,8 +8,17 @@ use Illuminate\Support\Facades\Mail;
 use App\Events\ArticleRejected;
 use App\Mail\Rejected;
 
-class SendRejectionNotice
+class SendRejectionNotice implements ShouldQueue
 {
+    use InteractsWithQueue;
+
+    public int $tries = 3;
+
+    public function backoff(): array
+    {
+        return [5, 15, 30];
+    }
+
     /**
      * Create the event listener.
      */
