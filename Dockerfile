@@ -34,15 +34,17 @@ RUN composer install \
     && npm ci \
     && npm run build \
     && mkdir -p \
+        /opt/newspage-seed \
         storage/app/public/images/articles \
         storage/framework/cache \
         storage/framework/sessions \
         storage/framework/views \
         storage/logs \
+    && cp storage/app/public/images/articles/default.jpg /opt/newspage-seed/default.jpg \
     && php artisan storage:link \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8000
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+CMD ["sh", "-c", "mkdir -p storage/app/public/images/articles && if [ ! -f storage/app/public/images/articles/default.jpg ]; then cp /opt/newspage-seed/default.jpg storage/app/public/images/articles/default.jpg; fi && exec php artisan serve --host=0.0.0.0 --port=8000"]
