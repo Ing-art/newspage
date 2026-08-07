@@ -1,0 +1,13 @@
+.git
+.env
+.env.*
+!.env.docker.example
+node_modules
+vendor
+public/build
+public/hot
+public/storage
+storage/logs/*
+Dockerfile*
+compose*.yaml
+compose*.yml

@@ -293,6 +293,12 @@
                                         <td class="text-center">{{ $article->created_at }}</td>
                                         <td class="text-center">{{ $status }}</td>
                                         <td class="text-center">
+                                            @if (Auth::user()->can('update', $article))
+                                                <a class="mx-2" href="{{ route('articles.edit', $article->id) }}">
+                                                    <button class="btn btn-dark">Edit</button>
+                                                </a>
+                                            @endif
+
                                             @if (Auth::user()->can('delete', $article))
                                                 <a class="mx-2"
                                                     href="{{ route('articles.delete', $article->id) }}">

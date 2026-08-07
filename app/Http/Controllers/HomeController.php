@@ -14,65 +14,48 @@ class HomeController extends Controller
 
     public function index(Request $request){
 
-        // For users who have serveral roles
-        if($request->user()->hasRole(['writer', 'reader', 'editor'])){
+        $user = $request->user();
+        $dashboard = [
+            'articles' => collect(),
+            'articlesrejected' => collect(),
+            'drafts' => collect(),
+            'comments' => collect(),
+            'articlestoreview' => collect(),
+            'users' => collect(),
+        ];
 
-            $comments = [];
-            $articlestoreview = [];
-            $articles = [];
-            $articlesrejected = [];
-            $drafts = [];
-
-
-            if($request->user()->hasRole(['writer'])){
-
-                $articles = $request->user()->articles()->whereNotNull('published_at')->where('rejected',0)->orderby('published_at', 'DESC')->get();
-                $articlesrejected = $request->user()->articles()->where('rejected',1)->orderby('updated_at', 'DESC')->get();
-                $drafts = $request->user()->articles()->whereNull('published_at')->where('rejected',0)->get();
-
-            }
-
-            if($request->user()->hasRole(['reader'])){
-                $articles = $request->user()->articles()->whereNotNull('published_at')->where('rejected',0)->orderby('published_at', 'DESC')->get();
-                $articlesrejected = $request->user()->articles()->where('rejected',1)->orderby('updated_at', 'DESC')->get();
-                $drafts = $request->user()->articles()->whereNull('published_at')->where('rejected',0)->get();
-                $comments = $request->user()->comments()->orderby('created_at', 'DESC')->get();
-
-            }
-
-            if($request->user()->hasRole(['editor'])){
-
-                $articlestoreview = Article::whereNull('published_at')->orWhere('rejected', 1)->get();
-
-            }
-
-            return view('dashboard', ['articles' => $articles, 'articlesrejected' => $articlesrejected, 'drafts' => $drafts, 'comments' => $comments, 'articlestoreview' => $articlestoreview] );
-
+        if ($user->hasRole('writer')) {
+            $dashboard['articles'] = $user->articles()
+                ->whereNotNull('published_at')
+                ->where('rejected', 0)
+                ->orderBy('published_at', 'DESC')
+                ->get();
+            $dashboard['articlesrejected'] = $user->articles()
+                ->where('rejected', 1)
+                ->orderBy('updated_at', 'DESC')
+                ->get();
+            $dashboard['drafts'] = $user->articles()
+                ->whereNull('published_at')
+                ->where('rejected', 0)
+                ->get();
         }
 
-        if($request->user()->hasRole('editor')){
-
-            $articlestoreview = Article::whereNull('published_at')->orWhere('rejected', 1)->get();
-
-            return view('dashboard', ['articlestoreview' => $articlestoreview]);
-
+        if ($user->hasRole('reader')) {
+            $dashboard['comments'] = $user->comments()
+                ->orderBy('created_at', 'DESC')
+                ->get();
         }
 
-        if($request->user()->hasRole(['writer', 'reader'])){
-
-            $comments = $request->user()->comments()->orderby('created_at', 'DESC')->get();
-            // dd($comments);
-            return view('dashboard', ['comments'=> $comments]);
-
+        if ($user->hasRole('editor')) {
+            $dashboard['articlestoreview'] = Article::whereNull('published_at')
+                ->orWhere('rejected', 1)
+                ->get();
         }
 
-        if($request->user()->hasRole('admin')){
-
-            $users = User::orderby('created_at', 'DESC')->get();
-
-            return view('dashboard', ['users' =>$users]);
-
+        if ($user->hasRole('admin')) {
+            $dashboard['users'] = User::orderBy('created_at', 'DESC')->get();
         }
+
+        return view('dashboard', $dashboard);
     }
 }
-

@@ -18,18 +18,26 @@ class AdminController extends Controller
 
     public function setrole(Request $request){
 
-        $role = Role::find($request->input('role_id'));
-        $user = User::find($request->input('user_id'));
+        $validated = $request->validate([
+            'role_id' => ['required', 'integer', 'exists:roles,id'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+        ]);
 
-        try{
-            $user->roles()->attach($role->id, [
+        $role = Role::findOrFail($validated['role_id']);
+        $user = User::findOrFail($validated['user_id']);
+
+        $changes = $user->roles()->syncWithoutDetaching([
+            $role->id => [
                 'created_at' => now(),
                 'updated_at' => now()
-            ]);
-            return back()->with('success', "Role $role->role granted to user $user->name successfuly");
-        }catch(QueryException $e){
-            return back()->withErrors("The role $role->role could not be granted to user $user->name");
+            ],
+        ]);
+
+        if (empty($changes['attached'])) {
+            return back()->with('success', "User $user->name already has the $role->role role");
         }
+
+        return back()->with('success', "Role $role->role granted to user $user->name successfully");
     }
 
     public function removerole(Request $request){

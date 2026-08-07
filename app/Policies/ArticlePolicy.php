@@ -20,9 +20,11 @@ class ArticlePolicy
         return $user->hasRole('writer');
     }
 
-    // Only the article's writer can edit an article if it is not published or it is rejected
+    // Writers can edit their own drafts or rejected articles. Verified editors
+    // can edit any article, including one that has already been published.
     public function update(User $user, Article $article){
-        return ($user->isOwner($article) && ($article->published_at == NULL || $article->rejected == 1));
+        return ($user->isOwner($article) && ($article->published_at == NULL || $article->rejected == 1))
+            || ($user->hasRole('editor') && $user->email_verified_at != NULL);
     }
 
     // Only the editor and the writer - the latter when the article is not published
