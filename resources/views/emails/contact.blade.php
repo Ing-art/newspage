@@ -9,6 +9,9 @@
             h1 { color: #8f2432; margin: 0 auto; max-width: 706px; }
             h2 { margin-top: 0; }
             a { color: #8f2432; }
+            .sender-details { border-bottom: 1px solid #dedbd3; margin-bottom: 24px; padding-bottom: 16px; }
+            .sender-details p { margin: 4px 0; }
+            .message { white-space: pre-wrap; }
             footer { color: #696969; font-size: 12px; margin: 0 auto; max-width: 706px; }
         </style>
     </head>
@@ -16,11 +19,13 @@
 
         <h1 class="col-10">{{config('app.name')}}</h1>
         <main>
-            <h2>Message recieved: {{$contact->subject}} </h2>
-            <p>From: {{$contact->sender}} <a href="mailto: {{$contact->email}}">
-                {{$contact->email}}</a>
-            </p>
-            <p>{{$contact->msg}}</p>
+            <h2>Message received: {{ $contact->subject }}</h2>
+            <div class="sender-details">
+                <p><strong>Sender's email:</strong> <a href="mailto:{{ $contact->email }}">{{ $contact->email }}</a></p>
+                <p><strong>Name:</strong> {{ $contact->sender }}</p>
+            </div>
+            <p><strong>Message:</strong></p>
+            <p class="message">{{ $contact->msg }}</p>
         </main>
         <footer class="page-footer font-small p-4 my-4 bg-light">
             <p>Created by {{ $author }}. Developped with <b>Laravel</b> and <b>Bootstrap</b>
