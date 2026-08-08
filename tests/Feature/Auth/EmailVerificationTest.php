@@ -19,7 +19,17 @@ class EmailVerificationTest extends TestCase
 
         $response = $this->actingAs($user)->get('/verify-email');
 
-        $response->assertStatus(200);
+        $response->assertStatus(200)
+            ->assertSee('Dashboard not available: your email address has not been verified.');
+    }
+
+    public function test_unverified_user_is_redirected_away_from_the_dashboard(): void
+    {
+        $user = User::factory()->unverified()->create();
+
+        $this->actingAs($user)
+            ->get(route('dashboard'))
+            ->assertRedirect(route('verification.notice'));
     }
 
     public function test_email_can_be_verified(): void

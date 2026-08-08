@@ -10,7 +10,17 @@ class Article extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['headline', 'text', 'subject', 'istopnews', 'image', 'user_id', 'rejected'];
+    protected $fillable = ['headline', 'text', 'subject', 'istopnews', 'image', 'user_id', 'rejected', 'submitted'];
+
+    protected function casts(): array
+    {
+        return [
+            'istopnews' => 'boolean',
+            'rejected' => 'boolean',
+            'submitted' => 'boolean',
+            'published_at' => 'datetime',
+        ];
+    }
 
 
     // Return the writer of the article

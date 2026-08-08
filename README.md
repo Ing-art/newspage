@@ -10,8 +10,8 @@ The project supports the complete lifecycle of an article: drafting, editorial r
 - Article browsing, pagination, subjects, images, and visit tracking
 - Registration, login, password reset, and email verification
 - Role-based dashboards and authorization
-- Article drafting and image upload
-- Editorial review, publication, rejection, and top-news management
+- Article drafting, submission, image upload, and editorial status tracking
+- Editorial review, publication, rejection, unpublishing, and top-news management
 - Reader comments
 - User and role administration
 - Contact form and email notifications
@@ -37,25 +37,25 @@ A writer can:
 
 - Create articles
 - Upload a featured image
-- View their published, rejected, and draft articles
-- Edit their own drafts and rejected articles
-- Delete their own unpublished articles
+- View their published, submitted, rejected, and draft articles in separate dashboard sections
+- Edit and delete their own drafts and rejected articles
+- Submit a draft or rejected article for editorial review
 
-New articles are saved as drafts. They are not publicly visible until an editor approves and publishes them.
+New articles are saved as drafts and are not visible to editors until the writer submits them. Once submitted, the writer can still view the article in **Submitted Articles**, but can no longer edit or delete it while editorial review is pending. Saving a newly created or edited article returns the user to the dashboard.
 
 ### Editor
 
 A verified editor can:
 
-- Review draft and rejected articles
-- Edit articles, including published articles
-- Publish an article
-- Reject an article
-- Delete articles
+- Review articles explicitly submitted by writers
+- Publish or reject an article that is pending review
+- Return a published article to its writer as a draft
 - Mark an article as top news
 - Remove the top-news status
 
-Publishing or rejecting an article triggers an email notification to its writer.
+Editors cannot edit or delete articles: only the writer who owns an article may alter its signed content. Unsubmitted drafts and rejected articles are not shown in the editor dashboard. Published articles remain available there so editors can unpublish them or manage their top-news status. Publishing or rejecting an article triggers an email notification to its writer.
+
+If an account has both the `writer` and `editor` roles, ownership rules still apply. The user may edit or delete only their own drafts and rejected articles. Once one of their articles is submitted, it is locked in **Editorial Articles** just like any other submission; the user must reject it before revising it. A published article must first be unpublished before its writer can edit or delete it.
 
 ### Administrator
 
@@ -72,14 +72,26 @@ The `admin` role manages users and roles; it does not implicitly include writer 
 
 1. A verified writer creates an article.
 2. The article is stored as an unpublished draft.
-3. An editor sees it in the **Articles to Review** section of the dashboard.
-4. The editor may edit, reject, or publish the article.
-5. When published, the publication timestamp is recorded and the article becomes publicly available.
-6. When rejected, the article returns to the writer as a rejected item and can be revised.
-7. The writer receives an email notification after publication or rejection.
-8. An editor may promote a published article as top news.
+3. The draft remains private to its writer, who may edit, delete, or submit it.
+4. Submitting the article moves it to **Submitted Articles**, locks writer-side editing and deletion, and makes it available to editors.
+5. A verified editor may reject or publish the submitted article but cannot alter or delete its signed content.
+6. Publishing records the publication timestamp, clears the submitted state, and makes the article publicly available.
+7. Rejecting clears the submitted state and returns the article to the writer's **Rejected Articles** section. The editor no longer sees it as pending review.
+8. The writer may edit, delete, or resubmit a rejected article. Resubmission locks it again until a new editorial decision is made.
+9. Unpublishing returns a published article to the writer as a regular draft and also removes its top-news status.
+10. The writer receives an email notification after publication or rejection.
+11. An editor may promote a published article as top news or remove that status.
 
-Authorization is enforced on the server through Laravel policies and middleware. Hiding a button in the interface is not the only security measure: protected controller actions also verify the authenticated user's permissions.
+| State | Writer access | Editor access | Public access |
+| --- | --- | --- | --- |
+| Draft | View, edit, delete, submit | Hidden | Hidden |
+| Submitted | View only | View, publish, reject | Hidden |
+| Rejected | View, edit, delete, resubmit | Hidden | Hidden |
+| Published | View | View, unpublish, manage top news | Visible |
+
+Authorization is enforced on the server through Laravel policies and middleware. Hiding a button in the interface is not the only security measure: protected controller actions also verify the authenticated user's permissions and current article state. Submission, publication, rejection, unpublishing, and top-news changes use state-changing HTTP requests with CSRF protection rather than `GET` links.
+
+The dashboard requires authentication and a verified email address. An authenticated user whose address is still unverified is redirected to the verification screen and shown a **Dashboard not available** message.
 
 ## Technology stack
 
@@ -121,6 +133,8 @@ They are exposed by the application under:
 ```text
 /storage/images/articles/{filename}
 ```
+
+The editorial state is represented by the `submitted` and `rejected` flags together with the nullable `published_at` timestamp. The migration that introduces `submitted` defaults existing articles to `false`, so existing unpublished articles remain drafts until their writers submit them.
 
 The Docker development configuration maps Laravel's public storage directory into `public/storage`, so uploaded images persist when containers are stopped or recreated.
 
@@ -219,6 +233,10 @@ docker compose down
 ```
 
 Running `docker compose down --volumes` also removes the MySQL and dependency volumes and therefore deletes the local database.
+
+### Testing database safety
+
+The editorial feature tests use Laravel's `RefreshDatabase` trait. Before running `php artisan test`, configure a dedicated testing database in `.env.testing` or `phpunit.xml`. Never point the test environment at the development or production database because the test suite may drop and recreate its tables.
 
 ## Email configuration
 

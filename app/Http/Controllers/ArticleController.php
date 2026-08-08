@@ -96,7 +96,7 @@ class ArticleController extends Controller
         // Save the new article with the data from POST
         $article->save();
 
-        return redirect()->route('homepage')
+        return redirect()->route('dashboard')
             ->with('success', 'Your article has been saved');
     }
 
@@ -109,7 +109,12 @@ class ArticleController extends Controller
                 return redirect()->route('login')->with('error', 'Please log in');
             }
 
-            if (!Auth::user()->isOwner($article) && !Auth::user()->hasRole('editor')) {
+            $editorCanReview = Auth::user()->hasRole('editor')
+                && Auth::user()->email_verified_at !== null
+                && $article->submitted
+                && !$article->rejected;
+
+            if (!Auth::user()->isOwner($article) && !$editorCanReview) {
                 abort(401, 'Article is not available');
             }
 
@@ -208,7 +213,7 @@ class ArticleController extends Controller
 
         $article->save();
 
-        return redirect()->route('articles.show', $article->id)
+        return redirect()->route('dashboard')
             ->with('success', "Article successfuly updated");
     }
 
@@ -288,6 +293,7 @@ class ArticleController extends Controller
 
             $article->touch('published_at'); // Update the published_at value to now
             $article->rejected = 0;
+            $article->submitted = 0;
             $article->save();
 
             ArticlePublished::dispatch($article);
@@ -315,6 +321,7 @@ class ArticleController extends Controller
         $article->published_at = null;
         $article->istopnews = 0;
         $article->rejected = 0;
+        $article->submitted = 0;
         $article->save();
 
         return back()->with('success', 'The article has been returned to its writer as a draft.');
@@ -327,7 +334,7 @@ class ArticleController extends Controller
             return redirect()->route('login')->with('error', 'Please log in'); //FIXME login layout
         }
 
-        if ($request->user()->cant('maketopnews', $article))
+        if ($request->user()->cant('reject', $article))
             abort(401, 'Unauthorized operation. You are not an editor');
 
         // If the user has been blocked
@@ -342,15 +349,35 @@ class ArticleController extends Controller
 
         if ($article) {
 
-            ArticleRejected::dispatch($article);
-
             $article->rejected = 1;
+            $article->submitted = 0;
+            $article->published_at = null;
+            $article->istopnews = 0;
             $article->save();
+
+            ArticleRejected::dispatch($article);
 
             return back()->with('success', 'The article has been flagged as rejected');
         }
 
         return back()->with('message', 'something went wrong');
+    }
+
+    public function submit(Request $request, Article $article)
+    {
+        if ($request->user()->cant('submit', $article)) {
+            abort(401, 'Only the writer can submit an editable article.');
+        }
+
+        if ($request->user()->hasRole('blocked')) {
+            return redirect()->route('blocked');
+        }
+
+        $article->submitted = 1;
+        $article->rejected = 0;
+        $article->save();
+
+        return back()->with('success', 'The article has been submitted for editorial review.');
     }
 
     public function maketopnews(Request $request, Article $article)
@@ -360,7 +387,7 @@ class ArticleController extends Controller
             return redirect()->route('login')->with('error', 'Please log in'); 
         }
 
-        if ($request->user()->cant('reject', $article))
+        if ($request->user()->cant('maketopnews', $article))
             abort(401, 'Unauthorized operation. You are not an editor');
 
         // If the user has been blocked

@@ -39,16 +39,28 @@
                             <button class="btn btn-danger">Delete</button></a>
                     @endif
 
-                    @if (Auth::user()->can('reject', $article) && ($article->rejected == 0))
-                        <a class="mx-2" href="{{ route('articles.reject', $article->id) }}">
-                            <button class="btn btn-warning">Reject</button>
-                        </a>
+                    @if (Auth::user()->can('submit', $article))
+                        <form class="d-inline" method="POST" action="{{ route('articles.submit', $article->id) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button class="btn btn-success mx-2" type="submit">Submit</button>
+                        </form>
                     @endif
 
-                    @if (Auth::user()->can('publish', $article) && ($article->published_at == NULL || $article->rejected == 1))
-                        <a class="mx-2" href="{{ route('articles.publish', $article->id) }}">
-                            <button class="btn btn-success">Publish</button>
-                        </a>
+                    @if (Auth::user()->can('reject', $article))
+                        <form class="d-inline" method="POST" action="{{ route('articles.reject', $article->id) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button class="btn btn-warning mx-2" type="submit">Reject</button>
+                        </form>
+                    @endif
+
+                    @if (Auth::user()->can('publish', $article))
+                        <form class="d-inline" method="POST" action="{{ route('articles.publish', $article->id) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button class="btn btn-success mx-2" type="submit">Publish</button>
+                        </form>
                     @endif
 
                     @if (Auth::user()->can('unpublish', $article) && $article->published_at !== null)

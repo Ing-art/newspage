@@ -20,36 +20,55 @@ class ArticlePolicy
         return $user->hasRole('writer');
     }
 
-    // Writers can edit their own drafts or rejected articles. Verified editors
-    // can edit any article, including one that has already been published.
+    // Only the writer who owns an editable draft or rejected article can edit it.
     public function update(User $user, Article $article){
-        return ($user->isOwner($article) && ($article->published_at == NULL || $article->rejected == 1))
-            || ($user->hasRole('editor') && $user->email_verified_at != NULL);
+        return $user->hasRole('writer')
+            && $user->isOwner($article)
+            && $article->published_at === null
+            && !$article->submitted;
     }
 
-    // Only the editor and the writer - the latter when the article is not published
-    // can delete an article
+    // Only the writer who owns an editable draft or rejected article can delete it.
     public function delete(User $user, Article $article){
+        return $user->hasRole('writer')
+            && $user->isOwner($article)
+            && $article->published_at === null
+            && !$article->submitted;
+    }
 
-        return ($user->isOwner($article) && $article->published_at == NULL)
-        || ($user->hasRole('editor') && $user->email_verified_at !=NULL);
+    // Only the writer who owns an editable draft or rejected article can submit it.
+    public function submit(User $user, Article $article){
+        return $user->hasRole('writer')
+            && $user->isOwner($article)
+            && $article->published_at === null
+            && !$article->submitted;
     }
 
     // Only a verified editor can publish an article
     public function publish(User $user, Article $article){
 
-        return ($user->hasRole('editor') && $user->email_verified_at !=NULL);
+        return $user->hasRole('editor')
+            && $user->email_verified_at !== null
+            && $article->submitted
+            && $article->published_at === null
+            && !$article->rejected;
     }
 
     // Only a verified editor can return a published article to draft status.
     public function unpublish(User $user, Article $article){
-        return ($user->hasRole('editor') && $user->email_verified_at !=NULL);
+        return $user->hasRole('editor')
+            && $user->email_verified_at !== null
+            && $article->published_at !== null;
     }
 
     // Only a verified editor can reject an article
     public function reject(User $user, Article $article){
 
-        return ($user->hasRole('editor') && $user->email_verified_at !=NULL);
+        return $user->hasRole('editor')
+            && $user->email_verified_at !== null
+            && $article->submitted
+            && $article->published_at === null
+            && !$article->rejected;
     }
 
     // Only a verified editor can flag an article as topnews

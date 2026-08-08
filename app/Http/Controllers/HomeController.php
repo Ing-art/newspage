@@ -19,6 +19,7 @@ class HomeController extends Controller
             'articles' => collect(),
             'articlesrejected' => collect(),
             'drafts' => collect(),
+            'submittedarticles' => collect(),
             'comments' => collect(),
             'articlestoreview' => collect(),
             'users' => collect(),
@@ -31,12 +32,22 @@ class HomeController extends Controller
                 ->orderBy('published_at', 'DESC')
                 ->get();
             $dashboard['articlesrejected'] = $user->articles()
+                ->whereNull('published_at')
                 ->where('rejected', 1)
+                ->where('submitted', 0)
                 ->orderBy('updated_at', 'DESC')
                 ->get();
             $dashboard['drafts'] = $user->articles()
                 ->whereNull('published_at')
                 ->where('rejected', 0)
+                ->where('submitted', 0)
+                ->orderBy('updated_at', 'DESC')
+                ->get();
+            $dashboard['submittedarticles'] = $user->articles()
+                ->whereNull('published_at')
+                ->where('rejected', 0)
+                ->where('submitted', 1)
+                ->orderBy('updated_at', 'DESC')
                 ->get();
         }
 
@@ -47,7 +58,14 @@ class HomeController extends Controller
         }
 
         if ($user->hasRole('editor')) {
-            $dashboard['articlestoreview'] = Article::orderBy('updated_at', 'DESC')
+            $dashboard['articlestoreview'] = Article::where('rejected', 0)
+                ->where(function ($query) {
+                    $query->where(function ($pending) {
+                        $pending->whereNull('published_at')
+                            ->where('submitted', 1);
+                    })->orWhereNotNull('published_at');
+                })
+                ->orderBy('updated_at', 'DESC')
                 ->get();
         }
 

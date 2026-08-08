@@ -35,8 +35,12 @@ Route::resource('comments', CommentController::class);
 // Homepage
 Route::get('/', [WelcomeController::class, 'index'])->name('homepage');
 
+// Submit a draft or rejected article for editorial review
+Route::patch('articles/{article}/submit', [ArticleController::class, 'submit'])
+    ->middleware(['auth', 'verified'])->name('articles.submit');
+
 // Publish
-Route::get('articles/{article}/publish',[ArticleController::class, 'publish'])
+Route::patch('articles/{article}/publish',[ArticleController::class, 'publish'])
     ->middleware(['auth', 'verified'])->name('articles.publish');
 
 // Return a published article to its writer as a draft
@@ -44,7 +48,7 @@ Route::patch('articles/{article}/unpublish', [ArticleController::class, 'unpubli
     ->middleware(['auth', 'verified'])->name('articles.unpublish');
 
 // Reject
-Route::get('articles/{article}/reject',[ArticleController::class, 'reject'])
+Route::patch('articles/{article}/reject',[ArticleController::class, 'reject'])
     ->middleware(['auth', 'verified'])->name('articles.reject');
 
 // Make Top News
