@@ -39,16 +39,20 @@ Route::get('/', [WelcomeController::class, 'index'])->name('homepage');
 Route::get('articles/{article}/publish',[ArticleController::class, 'publish'])
     ->middleware(['auth', 'verified'])->name('articles.publish');
 
+// Return a published article to its writer as a draft
+Route::patch('articles/{article}/unpublish', [ArticleController::class, 'unpublish'])
+    ->middleware(['auth', 'verified'])->name('articles.unpublish');
+
 // Reject
 Route::get('articles/{article}/reject',[ArticleController::class, 'reject'])
     ->middleware(['auth', 'verified'])->name('articles.reject');
 
 // Make Top News
-Route::get('articles/{article}/maketopnews', [ArticleController::class, 'maketopnews'])
+Route::patch('articles/{article}/maketopnews', [ArticleController::class, 'maketopnews'])
     ->middleware(['auth', 'verified'])->name('articles.maketopnews');
 
 // Remove from Top News
-Route::get('articles/{article}/removetopnews', [ArticleController::class, 'removetopnews'])
+Route::patch('articles/{article}/removetopnews', [ArticleController::class, 'removetopnews'])
     ->middleware(['auth', 'verified'])->name('articles.removetopnews');
 
 // Original Breeze Dashboard Route

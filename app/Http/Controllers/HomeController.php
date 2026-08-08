@@ -47,8 +47,7 @@ class HomeController extends Controller
         }
 
         if ($user->hasRole('editor')) {
-            $dashboard['articlestoreview'] = Article::whereNull('published_at')
-                ->orWhere('rejected', 1)
+            $dashboard['articlestoreview'] = Article::orderBy('updated_at', 'DESC')
                 ->get();
         }
 

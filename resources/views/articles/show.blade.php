@@ -51,16 +51,28 @@
                         </a>
                     @endif
 
-                    @if (Auth::user()->can('maketopnews', $article) && ($article->published_at == NULL || $article->istopnews == 0))
-                        <a class="mx-2" href="{{ route('articles.maketopnews', $article->id) }}">
-                            <button class="btn btn-success">Top News</button>
-                        </a>
+                    @if (Auth::user()->can('unpublish', $article) && $article->published_at !== null)
+                        <form class="d-inline" method="POST" action="{{ route('articles.unpublish', $article->id) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button class="btn btn-warning mx-2" type="submit">Unpublish</button>
+                        </form>
                     @endif
 
-                    @if (Auth::user()->can('removetopnews', $article) && ($article->published_at == NULL || $article->istopnews == 1))
-                    <a class="mx-2" href="{{ route('articles.removetopnews', $article->id) }}">
-                        <button class="btn btn-danger">Remove Top News</button>
-                    </a>
+                    @if (Auth::user()->can('maketopnews', $article) && $article->published_at !== null && $article->istopnews == 0)
+                        <form class="d-inline" method="POST" action="{{ route('articles.maketopnews', $article->id) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button class="btn btn-success mx-2" type="submit">Top News</button>
+                        </form>
+                    @endif
+
+                    @if (Auth::user()->can('removetopnews', $article) && $article->published_at !== null && $article->istopnews == 1)
+                        <form class="d-inline" method="POST" action="{{ route('articles.removetopnews', $article->id) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button class="btn btn-danger mx-2" type="submit">Remove Top News</button>
+                        </form>
                     @endif
                 </div>
             </div>

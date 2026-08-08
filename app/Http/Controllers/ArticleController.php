@@ -109,7 +109,7 @@ class ArticleController extends Controller
                 return redirect()->route('login')->with('error', 'Please log in');
             }
 
-            if (Auth::user()->hasRole('reader')) {
+            if (!Auth::user()->isOwner($article) && !Auth::user()->hasRole('editor')) {
                 abort(401, 'Article is not available');
             }
 
@@ -298,6 +298,28 @@ class ArticleController extends Controller
         return back()->with('message', 'something went wrong');
     }
 
+    public function unpublish(Request $request, Article $article)
+    {
+        if ($request->user()->cant('unpublish', $article)) {
+            abort(401, 'Unauthorized operation. You are not an editor');
+        }
+
+        if ($request->user()->hasRole('blocked')) {
+            return redirect()->route('blocked');
+        }
+
+        if ($article->published_at === null) {
+            return back()->with('success', 'The article is already a draft.');
+        }
+
+        $article->published_at = null;
+        $article->istopnews = 0;
+        $article->rejected = 0;
+        $article->save();
+
+        return back()->with('success', 'The article has been returned to its writer as a draft.');
+    }
+
     public function reject(Request $request, Article $article)
     {
 
@@ -305,7 +327,7 @@ class ArticleController extends Controller
             return redirect()->route('login')->with('error', 'Please log in'); //FIXME login layout
         }
 
-        if ($request->user()->cant('reject', $article))
+        if ($request->user()->cant('maketopnews', $article))
             abort(401, 'Unauthorized operation. You are not an editor');
 
         // If the user has been blocked
@@ -346,6 +368,14 @@ class ArticleController extends Controller
             return redirect()->route('blocked');
         }
 
+        if ($article->published_at === null) {
+            return back()->withErrors('Only published articles can be marked as top news.');
+        }
+
+        if ($article->istopnews == 1) {
+            return back()->with('success', 'The article is already top news.');
+        }
+
         $article->istopnews = 1;
         $article->save();
 
@@ -360,12 +390,16 @@ class ArticleController extends Controller
             return redirect()->route('login')->with('error', 'Please log in'); 
         }
 
-        if ($request->user()->cant('reject', $article))
+        if ($request->user()->cant('removetopnews', $article))
             abort(401, 'Unauthorized operation. You are not an editor');
 
         // If the user has been blocked
         if ($request->user()->hasRole('blocked')) {
             return redirect()->route('blocked');
+        }
+
+        if ($article->istopnews == 0) {
+            return back()->with('success', 'The article is not top news.');
         }
 
         $article->istopnews = 0;

@@ -41,6 +41,11 @@ class ArticlePolicy
         return ($user->hasRole('editor') && $user->email_verified_at !=NULL);
     }
 
+    // Only a verified editor can return a published article to draft status.
+    public function unpublish(User $user, Article $article){
+        return ($user->hasRole('editor') && $user->email_verified_at !=NULL);
+    }
+
     // Only a verified editor can reject an article
     public function reject(User $user, Article $article){
 

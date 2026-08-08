@@ -255,7 +255,7 @@
 
                         @if (!empty($articlestoreview))
                         <div class="container col-12 card text-center table-responsive">
-                            <h2 class="text-center mt-3 mb-3 fw-bold">Articles to Review</h2>
+                            <h2 class="text-center mt-3 mb-3 fw-bold">Editorial Articles</h2>
                             <table class="table table-stripped table-bordered table-hover">
                                 <tr class="text-center">
                                     <th>Id</th>
@@ -284,10 +284,14 @@
                                             </div>
                                         </td>
                                         @php
-                                            if ($article->rejected == 0) {
-                                                $status = 'New';
-                                            } else {
+                                            if ($article->rejected == 1) {
                                                 $status = 'Rejected';
+                                            } elseif ($article->published_at !== null && $article->istopnews == 1) {
+                                                $status = 'Top News';
+                                            } elseif ($article->published_at !== null) {
+                                                $status = 'Published';
+                                            } else {
+                                                $status = 'Draft';
                                             }
                                         @endphp
                                         <td class="text-center">{{ $article->created_at }}</td>
@@ -318,18 +322,27 @@
                                                     <button class="btn btn-success">Publish</button>
                                                 </a>
                                             @endif
-                                            @if (Auth::user()->can('maketopnews', $article) && ($article->published_at == null || $article->istopnews == 0))
-                                                <a class="mx-2"
-                                                    href="{{ route('articles.maketopnews', $article->id) }}">
-                                                    <button class="btn btn-success">Top News</button>
-                                                </a>
+                                            @if (Auth::user()->can('unpublish', $article) && $article->published_at !== null)
+                                                <form class="d-inline" method="POST" action="{{ route('articles.unpublish', $article->id) }}">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button class="btn btn-warning mx-2" type="submit">Unpublish</button>
+                                                </form>
                                             @endif
-                                            @if (Auth::user()->can('removetopnews', $article) && ($article->published_at == null && $article->istopnews == 1))
-                                            <a class="mx-2"
-                                                href="{{ route('articles.removetopnews', $article->id) }}">
-                                                <button class="btn btn-danger">Remove Top News</button>
-                                            </a>
-                                        @endif
+                                            @if (Auth::user()->can('maketopnews', $article) && $article->published_at !== null && $article->istopnews == 0)
+                                                <form class="d-inline" method="POST" action="{{ route('articles.maketopnews', $article->id) }}">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button class="btn btn-success mx-2" type="submit">Top News</button>
+                                                </form>
+                                            @endif
+                                            @if (Auth::user()->can('removetopnews', $article) && $article->published_at !== null && $article->istopnews == 1)
+                                                <form class="d-inline" method="POST" action="{{ route('articles.removetopnews', $article->id) }}">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button class="btn btn-danger mx-2" type="submit">Remove Top News</button>
+                                                </form>
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty
