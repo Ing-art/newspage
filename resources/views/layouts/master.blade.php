@@ -161,7 +161,7 @@
 
             <footer class="page-footer">
                 <p class="small mb-0">
-                    Created with <b>Laravel</b> and <b>Bootstrap</b> by <i>{{ $author }}</i>
+                    Developped by <i>{{ $author }}</i>
                     <!--Defined in AppServiceProvider-->
                 </p>
             </footer>
